@@ -17,6 +17,8 @@ MESSAGE_HELP = "Innopolis schedule bot for Innopolis students.\n" \
                "/reminders: turn reminders on/off\n" \
                "/friend: friend's schedule for now\n" \
                "/help: help\n\n" \
+               "This project is open source and you may contribute:\n" \
+               "https://gitlab.com/Louie_ru/InnoSchedule\n" \
                "If you are aware of any permanent changes in your schedule, please inform us: " \
                "@Nmikriukov, @thedownhill (room 2-103)"
 MESSAGE_USER_NOT_CONFIGURED = "Sorry. I do not know your groups yet. 😥\n"\
