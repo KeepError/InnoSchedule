@@ -4,12 +4,10 @@ All settings are stored here
 """
 
 LOG_FILE_NAME = 'log'
-PROXY_PROTOCOL = 'https'
-PROXY_SOCKS = 'socks5'
-PROXY_LOGIN = '356819408'
-PROXY_PASSWORD = 'nya8e4Es'
-PROXY_ADDRESS = 'deimos.public.opennetwork.cc'
-PROXY_PORT = '1090'
+PROXY_PROTOCOL = 'http'
+PROXY_SOCKS = 'http'
+PROXY_ADDRESS = '177.136.122.98'
+PROXY_PORT = '53281'
 REGISTERED_COURSES = {'BS1':    ['1', '2', '3', '4', '5', '6'],
                       'BS2':    ['1', '2', '3', '8', '5', '6', '7'],
                       'BS3':    ['SE', 'RO', 'DS1', 'DS2'],

@@ -22,8 +22,7 @@ All user interaction through telegram is written here
 logging.basicConfig(filename=config.LOG_FILE_NAME, level=logging.INFO)
 bot = telebot.TeleBot(token)
 # set proxy settings (thx ro Roskomnadzor)
-telebot.apihelper.proxy = {config.PROXY_PROTOCOL: f'{config.PROXY_SOCKS}://{config.PROXY_LOGIN}:{config.PROXY_PASSWORD}'
-                                                  f'@{config.PROXY_ADDRESS}:{config.PROXY_PORT}'}
+telebot.apihelper.proxy = {config.PROXY_PROTOCOL: f'{config.PROXY_SOCKS}://@{config.PROXY_ADDRESS}:{config.PROXY_PORT}'}
 
 # register admin command handlers for sending messages everyone, e.t.c.
 register_admin_commands(bot)
@@ -261,4 +260,4 @@ bot.load_next_step_handlers()
 
 # start listening for user`s messages
 # bot.infinity_polling(none_stop=True, timeout=50)
-bot.polling(none_stop=True)  # for DEBUG only. Does not restart bot in case of crash
+bot.polling(none_stop=True, timeout=50)  # for DEBUG only. Does not restart bot in case of crash
