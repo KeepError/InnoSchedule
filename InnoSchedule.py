@@ -259,5 +259,5 @@ bot.enable_save_next_step_handlers()
 bot.load_next_step_handlers()
 
 # start listening for user`s messages
-# bot.infinity_polling(none_stop=True, timeout=50)
-bot.polling(none_stop=True, timeout=50)  # for DEBUG only. Does not restart bot in case of crash
+# bot.polling(none_stop=True, timeout=50)  # for DEBUG only. Does not restart bot in case of crash
+bot.infinity_polling(none_stop=True, timeout=50)
