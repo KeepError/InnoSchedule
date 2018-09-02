@@ -63,6 +63,17 @@ def set_reminders(user_id, need_reminders):
     conn.commit()
 
 
+def set_alias(user_id, alias):
+    """
+    Update user`s alias in database
+
+    :param user_id: int
+    :param alias: string
+    """
+    db.execute("UPDATE users SET telegram_alias=? WHERE telegram_id=?", (alias, user_id,))
+    conn.commit()
+
+
 def get(user_id):
     """
     Function returns User by his telegram id or None if user not found

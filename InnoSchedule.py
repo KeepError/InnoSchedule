@@ -94,6 +94,9 @@ def main_buttons_handler(message):
     log(message)
     if not is_user_configured(message):
         return
+    # update alias if it was changed
+    if user_controller.get(message.from_user.id).alias != message.from_user.username:
+        user_controller.set_alias(message.from_user.id, message.from_user.username)
     # can not get schedule if not configured
     if message.text == strings.TEXT_BUTTON_NOW:
         send_current_schedule(message.chat.id, message.from_user.id)
