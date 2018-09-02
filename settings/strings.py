@@ -11,7 +11,7 @@ TEXT_BUTTON_WEEK = "WEEK📆"
 
 
 MESSAGE_HI = "Hi there!✋"
-MESSAGE_HELP = "Innopolis schedule bot for Innopolis students.\n" \
+MESSAGE_HELP = "Schedule bot for Innopolis students.\n" \
                "Here are some commands, that might be useful for you:\n\n" \
                "/configure: manage your settings\n" \
                "/reminders: turn reminders on/off\n" \
@@ -19,8 +19,9 @@ MESSAGE_HELP = "Innopolis schedule bot for Innopolis students.\n" \
                "/help: help\n\n" \
                "This project is open source and you may contribute:\n" \
                "https://gitlab.com/Louie_ru/InnoSchedule\n" \
-               "If you are aware of any permanent changes in your schedule, please inform us: " \
-               "@Nmikriukov, @thedownhill (room 2-103)"
+               "We are unable to know all changes in schedule. " \
+               "In such case please inform us or offer db change on gitlab\n" \
+               "@Nmikriukov @thedownhill"
 MESSAGE_USER_NOT_CONFIGURED = "Sorry. I do not know your groups yet. 😥\n"\
                               " Please use /configure command to set it up"
 MESSAGE_FULL_WEEK = "Here you are:\nshorturl.at/qyBY6"
