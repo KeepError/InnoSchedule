@@ -69,6 +69,8 @@ def weekday_select_handler(message):
         return
     # remove star symbol if needed
     weekday = message.text[:2]
+    if weekday not in strings.TEXT_DAYS_OF_WEEK:
+        return
     # get list of lessons for specified user and day
     schedule = lesson_controller.get_day_lessons(message.from_user.id, day=strings.TEXT_DAYS_OF_WEEK.index(weekday))
     # convert lessons to understandable string output
