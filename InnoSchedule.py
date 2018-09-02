@@ -115,6 +115,7 @@ def unknown_input_handler(message):
     """
     Handler for any other unknown messages
     """
+    log(message)
     # show main buttons if unknown input sent
     bot.send_message(message.chat.id, strings.MESSAGE_ERROR, reply_markup=main_markup)
 
