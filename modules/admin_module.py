@@ -1,3 +1,6 @@
+import logging
+
+
 def register_admin_commands(bot):
     """
     Function allows to register special commands for admins
@@ -6,6 +9,16 @@ def register_admin_commands(bot):
 
     :param bot: Telebot
     """
+    logger = logging.getLogger("logger")
+
     @bot.message_handler(commands=['admin'])
     def admin(message):
+        log(message)
         bot.send_message(message.chat.id, u"Hi, admin!")
+
+    def log(message):
+        """
+        Write log info about admin message to file
+        """
+        logger.info(f"ADMIN {message.from_user.username} :: {message.from_user.id} :: "
+                    f"{message.text if message.text else '--not_text--'}")
