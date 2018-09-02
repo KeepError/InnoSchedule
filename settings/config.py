@@ -5,6 +5,7 @@ All settings are stored here
 
 LOG_FILE_NAME = 'log'
 LOG_MAX_SIZE_BYTES = 1024 * 1024  # MB
+LOGGER_NAME = 'logger'
 
 PROXY_PROTOCOL = 'http'
 PROXY_SOCKS = 'http'

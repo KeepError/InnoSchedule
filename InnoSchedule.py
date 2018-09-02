@@ -20,7 +20,7 @@ All user interaction through telegram is written here
 """
 
 # log configuration
-logger = logging.getLogger("logger")
+logger = logging.getLogger(config.LOGGER_NAME)
 logger.setLevel(logging.INFO)
 handler = RotatingFileHandler(config.LOG_FILE_NAME, maxBytes=config.LOG_MAX_SIZE_BYTES, backupCount=1)
 handler.setFormatter(logging.Formatter("%(asctime)s :: %(message)s"))

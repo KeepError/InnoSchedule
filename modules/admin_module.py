@@ -1,4 +1,5 @@
 import logging
+from settings.config import LOGGER_NAME
 
 
 def register_admin_commands(bot):
@@ -9,7 +10,7 @@ def register_admin_commands(bot):
 
     :param bot: Telebot
     """
-    logger = logging.getLogger("logger")
+    logger = logging.getLogger(LOGGER_NAME)
 
     @bot.message_handler(commands=['admin'])
     def admin(message):
