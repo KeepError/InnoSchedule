@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import logging
+from logging.handlers import RotatingFileHandler
 from datetime import datetime
 
 import telebot
@@ -18,8 +19,13 @@ Main InnoSchedule source
 All user interaction through telegram is written here
 """
 
+# log configuration
+logger = logging.getLogger("logger")
+logger.setLevel(logging.INFO)
+handler = RotatingFileHandler(config.LOG_FILE_NAME, maxBytes=config.LOG_MAX_SIZE_BYTES, backupCount=1)
+handler.setFormatter(logging.Formatter("%(asctime)s :: %(message)s"))
+logger.addHandler(handler)
 
-logging.basicConfig(filename=config.LOG_FILE_NAME, level=logging.INFO)
 bot = telebot.TeleBot(token)
 # set proxy settings (thx ro Roskomnadzor)
 telebot.apihelper.proxy = {config.PROXY_PROTOCOL: f'{config.PROXY_SOCKS}://@{config.PROXY_ADDRESS}:{config.PROXY_PORT}'}
@@ -69,6 +75,7 @@ def weekday_select_handler(message):
         return
     # remove star symbol if needed
     weekday = message.text[:2]
+    # force check message is weekday due to bug
     if weekday not in strings.TEXT_DAYS_OF_WEEK:
         return
     # get list of lessons for specified user and day
@@ -229,10 +236,10 @@ def process_friend_request_step(message):
 
 def log(message):
     """
-    Write log info to file
+    Write log info about message to file
     """
-    logging.info(f"{datetime.now()} :: {message.from_user.username} ({message.from_user.id}) :: "
-                 f"{message.text if not message.text else '--not a text sent--'}")
+    logger.info(f"{message.from_user.username} :: {message.from_user.id} :: "
+                f"{message.text if message.text else '--not_text--'}")
 
 
 def remind_time():
