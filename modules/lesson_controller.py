@@ -22,7 +22,7 @@ def get_day_lessons(user_id, day):
     if not user:
         return
 
-    columns = "subject, type, teacher, start, end, room"
+    columns = "subject, type, teacher, teacher_gender, start, end, room"
 
     # Take lessons that are common for whole course
     cursor.execute(f"SELECT {columns} FROM common_lessons "
