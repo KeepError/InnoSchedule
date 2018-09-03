@@ -67,10 +67,9 @@ class Lesson:
 
         :return: String
         """
-        kostyl = '👩' if self.teacher_gender else '👨'
 
         return f"{self.subject} {self.type}\n"\
-               f"{kostyl} {self.teacher}\n"\
+               f"{'👨' if self.teacher_gender else '👩'} {self.teacher}\n"\
                f"🕐 {datetime.strftime(self.start, '%H:%M')} 	— {datetime.strftime(self.end, '%H:%M')}\n" \
                f"🚪 {self.room}\n"
 
