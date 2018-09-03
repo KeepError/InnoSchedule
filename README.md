@@ -30,15 +30,15 @@ It allows you to get:
 
 ### common_lessons:
 
-**column:** | course | day | subject | type | teacher | start | end | room
--: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: 
-**type:** | TEXT | INTEGER | TEXT | INTEGER | TEXT | TEXT | TEXT | INTEGER
+**column:** | course | day | subject | type | teacher | teacher_gender | start | end | room
+-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: 
+**type:** | TEXT | INTEGER | TEXT | INTEGER | TEXT | INTEGER | TEXT | TEXT | INTEGER
 
 ### group_lessons:
 
-**column:** | course | day | subject | type | teacher | start | end | room | lesson_group
--: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-:
-**type:** | TEXT | INTEGER | TEXT | INTEGER | TEXT | TEXT | TEXT | INTEGER | TEXT
+**column:** | course | day | subject | type | teacher | teacher_gender | start | end | room | lesson_group
+-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-:
+**type:** | TEXT | INTEGER | TEXT | INTEGER | TEXT | INTEGER | TEXT | TEXT | INTEGER | TEXT
 
 
 Courses and groups are saved as TEXT, because it's easier to differ or modify them. Also masters have string group names (RO, DS)
@@ -49,11 +49,17 @@ Type could be:
 - 2 for Lab
 - 3 for others (masters have no division for lectures, tutorials and labs)
 
+Teacher gender:
+- 0 for female
+- 1 for male
+
 Start and end time is saved in "%H:%M" format (e.g. 09:00)
 
 All groups in group_lessons except course groups (e.g. English) should have some prefix (e.g. 'EN') to differ them from course groups
 
 Days are iterated from 0, because that is how datetime.datetime works
+
+Different threads should use different sqlite connection. Therefore, a new connection is created each time request is executed.
 
 # Main architecture
 
