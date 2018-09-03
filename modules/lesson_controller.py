@@ -6,8 +6,16 @@ from modules.lesson import Lesson
 from settings.config import REMIND_WHEN_LEFT_MINUTES
 
 
-conn = sqlite3.connect('db.sqlite', check_same_thread=False)
-cursor = conn.cursor()  # cursor allows to iterate over database data
+def make_new_connection():
+    """
+    Working with same sqlite connection from different threads can cause unpredictable behaviour
+    Since number of clients is not so big, it is "ok" to make new connection every time
+
+    :return: connection, cursor
+    """
+    conn = sqlite3.connect('db.sqlite', check_same_thread=False)
+    cursor = conn.cursor()  # cursor allows to iterate over database data
+    return conn, cursor
 
 
 def get_day_lessons(user_id, day):
@@ -18,6 +26,8 @@ def get_day_lessons(user_id, day):
     :param day:  int [0-6]
     :return: [Lesson]
     """
+    conn, cursor = make_new_connection()
+
     user = user_controller.get(user_id)
     if not user:
         return
@@ -98,6 +108,7 @@ def get_reminder_times():
 
     :return: [String]
     """
+    conn, cursor = make_new_connection()
     cursor.execute("SELECT start FROM group_lessons GROUP BY start UNION "
                    "SELECT start FROM common_lessons GROUP BY start")
     data = cursor.fetchall()

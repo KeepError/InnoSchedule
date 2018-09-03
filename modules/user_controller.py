@@ -2,8 +2,17 @@ import sqlite3
 
 from modules.user import User
 
-conn = sqlite3.connect('db.sqlite', check_same_thread=False)
-db = conn.cursor()  # cursor allows to iterate over database data
+
+def make_new_connection():
+    """
+    Working with same sqlite connection from different threads can cause unpredictable behaviour
+    Since number of clients is not so big, it is "ok" to make new connection every time
+
+    :return: connection, cursor
+    """
+    conn = sqlite3.connect('db.sqlite', check_same_thread=False)
+    cursor = conn.cursor()  # cursor allows to iterate over database data
+    return conn, cursor
 
 
 def register(user_id, alias):
@@ -13,7 +22,8 @@ def register(user_id, alias):
     :param user_id: int
     :param alias: string
     """
-    db.execute("INSERT INTO users (telegram_id, telegram_alias) VALUES (?,?)", (user_id, alias,))
+    conn, cursor = make_new_connection()
+    cursor.execute("INSERT INTO users (telegram_id, telegram_alias) VALUES (?,?)", (user_id, alias,))
     conn.commit()
 
 
@@ -24,7 +34,8 @@ def set_course(user_id, course):
     :param user_id: int
     :param course: string
     """
-    db.execute("UPDATE users SET course=? WHERE telegram_id=?", (course, user_id))
+    conn, cursor = make_new_connection()
+    cursor.execute("UPDATE users SET course=? WHERE telegram_id=?", (course, user_id))
     conn.commit()
 
 
@@ -35,7 +46,8 @@ def set_course_group(user_id, course_group):
     :param user_id: int
     :param course_group: string
     """
-    db.execute("UPDATE users SET course_group=? WHERE telegram_id=?", (course_group, user_id))
+    conn, cursor = make_new_connection()
+    cursor.execute("UPDATE users SET course_group=? WHERE telegram_id=?", (course_group, user_id))
     conn.commit()
 
 
@@ -46,7 +58,8 @@ def set_english_group(user_id, english_group):
     :param user_id: int
     :param english_group: string
     """
-    db.execute("UPDATE users SET english_group=? WHERE telegram_id=?", (english_group, user_id))
+    conn, cursor = make_new_connection()
+    cursor.execute("UPDATE users SET english_group=? WHERE telegram_id=?", (english_group, user_id))
     conn.commit()
 
 
@@ -59,7 +72,8 @@ def set_reminders(user_id, need_reminders):
     :param user_id: int
     :param need_reminders: int [0-1]
     """
-    db.execute("UPDATE users SET need_reminders=? WHERE telegram_id=?", (1 if need_reminders else 0, user_id))
+    conn, cursor = make_new_connection()
+    cursor.execute("UPDATE users SET need_reminders=? WHERE telegram_id=?", (1 if need_reminders else 0, user_id))
     conn.commit()
 
 
@@ -70,7 +84,8 @@ def set_alias(user_id, alias):
     :param user_id: int
     :param alias: string
     """
-    db.execute("UPDATE users SET telegram_alias=? WHERE telegram_id=?", (alias, user_id,))
+    conn, cursor = make_new_connection()
+    cursor.execute("UPDATE users SET telegram_alias=? WHERE telegram_id=?", (alias, user_id,))
     conn.commit()
 
 
@@ -81,8 +96,9 @@ def get(user_id):
     :param user_id: int
     :return: User or None
     """
-    db.execute("SELECT * FROM users WHERE telegram_id=?", (user_id,))
-    data = db.fetchone()
+    conn, cursor = make_new_connection()
+    cursor.execute("SELECT * FROM users WHERE telegram_id=?", (user_id,))
+    data = cursor.fetchone()
     return User(data) if data else None
 
 
@@ -93,8 +109,9 @@ def get_id_by_alias(alias):
     :param alias: string
     :return: int or None
     """
-    db.execute("SELECT telegram_id FROM users WHERE telegram_alias=?", (alias,))
-    data = db.fetchone()
+    conn, cursor = make_new_connection()
+    cursor.execute("SELECT telegram_id FROM users WHERE telegram_alias=?", (alias,))
+    data = cursor.fetchone()
     return data[0] if data else None
 
 
@@ -130,7 +147,8 @@ def delete(user_id):
 
     :param user_id: int
     """
-    db.execute("DELETE FROM users WHERE telegram_id=?", (user_id,))
+    conn, cursor = make_new_connection()
+    cursor.execute("DELETE FROM users WHERE telegram_id=?", (user_id,))
     conn.commit()
 
 
@@ -140,8 +158,9 @@ def get_users_with_reminders():
 
     :return: [User]
     """
-    db.execute("SELECT * FROM users WHERE need_reminders=1")
-    data = db.fetchall()
+    conn, cursor = make_new_connection()
+    cursor.execute("SELECT * FROM users WHERE need_reminders=1")
+    data = cursor.fetchall()
     return [User(x) for x in data]
 
 
@@ -151,6 +170,7 @@ def get_all_users():
 
     :return: [User]
     """
-    db.execute("SELECT * FROM users")
-    data = db.fetchall()
+    conn, cursor = make_new_connection()
+    cursor.execute("SELECT * FROM users")
+    data = cursor.fetchall()
     return [User(x) for x in data]
