@@ -16,6 +16,7 @@ class Lesson:
         :param arg: (subject: string,
                      type: int,
                      teacher: string,
+                     teacher_gender: int,
                      start: string,
                      end: string,
                      room: int)
@@ -23,12 +24,13 @@ class Lesson:
         self.subject = arg[0]
         self.type = ('Lec', 'Tut', 'Lab', '')[arg[1]]  # printed after subject name
         self.teacher = arg[2]
+        self.teacher_gender = arg[3]
         # time is stored as string in database and needs to be converted to datetime for comparing
-        start_time = time.strptime(arg[3], "%H:%M")
-        end_time = time.strptime(arg[4], "%H:%M")
+        start_time = time.strptime(arg[4], "%H:%M")
+        end_time = time.strptime(arg[5], "%H:%M")
         self.start = datetime.now().replace(hour=start_time.tm_hour, minute=start_time.tm_min)
         self.end = datetime.now().replace(hour=end_time.tm_hour, minute=end_time.tm_min)
-        self.room = arg[5]
+        self.room = arg[6]
 
     @property
     def minutes_until_start(self):
@@ -65,11 +67,12 @@ class Lesson:
 
         :return: String
         """
-        return f"LESSON 🎓: {self.subject} {self.type}\n"\
-               f"ROOM  #⃣: {self.room}\n"\
-               f"START 🕐: {datetime.strftime(self.start, '%H:%M')}\n"\
-               f"END 🕗: {datetime.strftime(self.end, '%H:%M')}\n"\
-               f"TEACHER 😉: {self.teacher}\n"
+        kostyl = '👩' if self.teacher_gender else '👨'
+
+        return f"{self.subject} {self.type}\n"\
+               f"{kostyl} {self.teacher}\n"\
+               f"🕐 {datetime.strftime(self.start, '%H:%M')} 	— {datetime.strftime(self.end, '%H:%M')}\n" \
+               f"🚪 {self.room}\n"
 
     def get_str_current(self):
         """
@@ -78,7 +81,9 @@ class Lesson:
 
         :return: String
         """
-        return str(self) + f"ENDS IN: {self.minutes_until_end // 60}h  {self.minutes_until_end % 60}m\n"
+        hours_until_end = self.minutes_until_end // 60
+        return f"{self}⏹{str(hours_until_end)+'h ' if hours_until_end > 0 else ''}" \
+               f"{self.minutes_until_end % 60}m\n"
 
     def get_str_future(self):
         """
@@ -87,4 +92,6 @@ class Lesson:
 
         :return: String
         """
-        return str(self) + f"STARTS IN: {self.minutes_until_start // 60}h  {self.minutes_until_start % 60}m\n"
+        hours_until_start = self.minutes_until_start // 60
+        return f"{self}▶️{str(hours_until_start)+'h ' if hours_until_start > 0 else ''}" \
+               f"{self.minutes_until_start % 60}m\n"

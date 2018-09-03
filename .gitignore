@@ -14,3 +14,5 @@ __pycache__/
 log
 
 settings/token\.py
+
+modules/admin_module\.py
