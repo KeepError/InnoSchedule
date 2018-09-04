@@ -7,10 +7,12 @@ LOG_FILE_NAME = 'log'
 LOG_MAX_SIZE_BYTES = 1024 * 1024  # MB
 LOGGER_NAME = 'logger'
 
-PROXY_PROTOCOL = 'http'
-PROXY_SOCKS = 'http'
-PROXY_ADDRESS = '177.136.122.98'
-PROXY_PORT = '53281'
+PROXY_PROTOCOL = 'https'
+PROXY_SOCKS = 'socks5'
+PROXY_LOGIN = '356819408'
+PROXY_PASSWORD = 'nya8e4Es'
+PROXY_ADDRESS = 'deimos.public.opennetwork.cc'
+PROXY_PORT = '1090'
 
 REGISTERED_COURSES = {'BS1':    ['1', '2', '3', '4', '5', '6'],
                       'BS2':    ['1', '2', '3', '8', '5', '6', '7'],

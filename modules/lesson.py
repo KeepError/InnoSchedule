@@ -81,7 +81,7 @@ class Lesson:
         :return: String
         """
         hours_until_end = self.minutes_until_end // 60
-        return f"{self}⏹{str(hours_until_end)+'h ' if hours_until_end > 0 else ''}" \
+        return f"{self}⏸️ {str(hours_until_end)+'h ' if hours_until_end > 0 else ''}" \
                f"{self.minutes_until_end % 60}m\n"
 
     def get_str_future(self):
@@ -92,5 +92,5 @@ class Lesson:
         :return: String
         """
         hours_until_start = self.minutes_until_start // 60
-        return f"{self}▶️{str(hours_until_start)+'h ' if hours_until_start > 0 else ''}" \
+        return f"{self}▶ ️{str(hours_until_start)+'h ' if hours_until_start > 0 else ''}" \
                f"{self.minutes_until_start % 60}m\n"

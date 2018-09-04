@@ -27,9 +27,11 @@ handler.setFormatter(logging.Formatter("%(asctime)s :: %(message)s", "%d.%m.%Y :
 logger.addHandler(handler)
 
 bot = telebot.TeleBot(token)
-# set proxy settings (thx ro Roskomnadzor)
-telebot.apihelper.proxy = {config.PROXY_PROTOCOL: f'{config.PROXY_SOCKS}://@{config.PROXY_ADDRESS}:{config.PROXY_PORT}'}
-
+"""
+# set proxy if needed (thx ro Roskomnadzor)
+telebot.apihelper.proxy = {config.PROXY_PROTOCOL: f'{config.PROXY_SOCKS}://{config.PROXY_LOGIN}:{config.PROXY_PASSWORD}'
+                                                  f'@{config.PROXY_ADDRESS}:{config.PROXY_PORT}'}
+"""
 # register admin command handlers for sending messages everyone, e.t.c.
 register_admin_commands(bot)
 
@@ -225,6 +227,9 @@ def process_friend_request_step(message):
     """
     Send current schedule of user with given alias to requesting person
     """
+    if message.text is None:
+        unknown_input_handler(message)
+        return
     # remove tabs, spaces and new line symbols
     alias = message.text.strip()
     # remove '@' at beginning
@@ -242,8 +247,7 @@ def log(message):
     """
     Write log info about message to file
     """
-    logger.info(f"{message.from_user.username} :: {message.from_user.id} :: "
-                f"{message.text if message.text else '--not_text--'}")
+    logger.info(f"{message.from_user.username} :: {message.text if message.text else '--not_text--'}")
 
 
 def remind_time():
