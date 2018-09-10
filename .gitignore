@@ -16,3 +16,5 @@ log
 settings/token\.py
 
 modules/admin_module\.py
+
+db_test\.sqlite
