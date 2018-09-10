@@ -47,7 +47,7 @@ Type could be:
 - 0 for Lecture
 - 1 for Tutorial
 - 2 for Lab
-- 3 for others (masters have no division for lectures, tutorials and labs)
+- 3 for empty (masters have no division for lectures, tutorials and labs)
 
 Teacher gender:
 - 0 for female
