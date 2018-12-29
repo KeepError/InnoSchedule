@@ -12,14 +12,3 @@ attach_schedule_module()
 attach_remind_module()
 # compose attached modules and start listening
 compose_attached_modules(set_proxy=True, restart_on_crash=False)
-
-"""
-изменить .gitignore
-добавить данные с syllabus
-протестировать с реальными данными
-дать тестировать другим
-автопарсинг изменений таблицы
-новая ссылка в док
-изменить логотип?
-сообщение для всех подготовить
-"""
