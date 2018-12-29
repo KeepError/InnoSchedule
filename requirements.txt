@@ -1,4 +1,5 @@
 PyTelegramBotAPI
+sqlalchemy
 gunicorn
 PySocks
 requests

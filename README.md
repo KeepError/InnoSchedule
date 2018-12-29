@@ -1,116 +1,104 @@
-# Innopolis schedule telegram bot
+[Russian README](README.ru.md)
+
+
+# InnoSchedule telegram bot
 
 [@InnoSchedule_bot](https://t.me/InnoSchedule_bot)
 
-
-This telegram bot is written for Innopolis bachelor and master students
-
-It allows you to get:
-- current and next lessons
-- schedule for any weekday
-- full student`s schedule table
-- your friend`s current and next lessons
-- reminders about next lesson
-
-# How it works?
-
-- python3.6
-- [PyTelegramBotAPI](https://github.com/eternnoir/pyTelegramBotAPI) for interaction with telegram api
-- [schedule](https://schedule.readthedocs.io/en/stable/) module for sending reminders in time
-- gunicorn, PySocks, requests and urllib3 for proxy work
-- sqlite3 for database 
-
-# Database structure:
-
-### users:
-
-**column:** | telegram_id | telegram_alias | course | course_group | english_group | need_reminders
--: | :-: | :-: | :-: | :-: | :-: | :-: 
-**type:** | INTEGER | TEXT | TEXT | TEXT | TEXT | INTEGER
-
-### common_lessons:
-
-**column:** | course | day | subject | type | teacher | teacher_gender | start | end | room
--: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: 
-**type:** | TEXT | INTEGER | TEXT | INTEGER | TEXT | INTEGER | TEXT | TEXT | INTEGER
-
-### group_lessons:
-
-**column:** | course | day | subject | type | teacher | teacher_gender | start | end | room | lesson_group
--: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-:
-**type:** | TEXT | INTEGER | TEXT | INTEGER | TEXT | INTEGER | TEXT | TEXT | INTEGER | TEXT
+This bot is written for Innopolis University students. It has a modular architecture that allows anyone to add his own module.
 
 
-Courses and groups are saved as TEXT, because it's easier to differ or modify them. Also masters have string group names (RO, DS)
+# How it works
 
-Type could be:
-- 0 for Lecture
-- 1 for Tutorial
-- 2 for Lab
-- 3 for empty (masters have no division for lectures, tutorials and labs)
+- `python3` was developed on version 3.7, but can work with earlier versions
+- `PyTelegramBotAPI` for work with telegram api
+- `sqlalchemy` ORM
+- `sqlite3` database
 
-Teacher gender:
-- 0 for female
-- 1 for male
 
-Start and end time is saved in "%H:%M" format (e.g. 09:00)
+# Existing modules
 
-All groups in group_lessons except course groups (e.g. English) should have some prefix (e.g. 'EN') to differ them from course groups
+At the moment there are 5 modules:
 
-Days are iterated from 0, because that is how datetime.datetime works
+1. `core` is the head module that links everything together. Contains all the necessary functionality for other modules:
+    - work with Telegram API
+    - logging
+    - establish a database connection
+2. `admin ` contains commands for admins. For example, displaying statistics or sending notifications to everyone
+3. `schedule ` allows you to get the schedule for a specific time or day of the week, as well as to see the schedule of friends
+4. `remind` sends out reminders about coming lesson
+5. `sample` is a working example of a simple module. It will be useful for those who want to add their own module
 
-Different threads should use different sqlite connection. Therefore, a new connection is created each time request is executed.
 
-# Main architecture
+# Install and run
 
-All telegram interaction is inside main InnoSchedule.py
-
-Database work is separated in lesson_controller and user_controller
-
-Reminder is simple module, which is just waiting in background until it is time to send reminders
-
-# Found bug or security problem?
-
-That is cool! ☺
-
-We are on git and you can leave issues. Please make new issue and describe what you found. We will check it soon and answer you. May be even fix that problem.
-
-# Have an idea for improvement?
-
-You can also make issue about your cool idea and we will consider it. But more interesting way is...
-
-Fork!
-
-You can change our code and contribute straight inside this project. But there are some rules:
-- Do not change already existing features a lot
-- Write relevant, useful features. This is schedule bot, not something else
-- Do not send unnecessary messages what will distract people
-- No marketing or commercial
-- All messages, comments in English
-
-# Can I start this bot for myself?
-
-Sure. You may clone it, change database for your own schedule, insert telegram bot token and run. So easy.
-
-Do not forget:
-- python3.6
-- pip3 install PyTelegramBotAPI gunicorn PySocks requests urllib3 schedule --upgrade
-
-Put token inside settings/token.py
-```python
-token="YOUR_TOKEN"
+```bash
+git clone https://gitlab.com/Louie_ru/InnoSchedule
+cd InnoSchedule
+pip3 install -r requirements.txt
 ```
-
-Write your own code in admin_module if you wish
-
-Change settings in settings/config.py
-
-Run:
-```
+Change token to modules/admin/permanent.py on the token of your test bot, which can be obtained from [@BotFather](https://t.me/BotFather)
+```bash
 python3 InnoSchedule.py
 ```
 
+
+# How to add your own module?
+
+Before creating your module, it is recommended to read the documentation of the libraries used:
+
+- [PyTelegramBotAPI](https://github.com/eternnoir/pyTelegramBotAPI)
+- [sqlalchemy query API](https://docs.sqlalchemy.org/en/latest/orm/query.html)
+- [sqlalchemy relationship patterns](https://docs.sqlalchemy.org/en/latest/orm/basic_relationships.html)
+
+The module consists of 4 main parts:
+
+1. `source.py` basic code for registering commands and functions to work with users
+2. `classes.py ` classes used by the module. Described in sqlalchemy format for mapping to database by orm
+3. `controller.py` functions for working with the database. The main code does not work with the base directly, but through the controller
+4. `permanent.py ` stores all constant values such as strings, module settings, etc. 
+
+To add a module to the main branch, you need to make a fork of the repository and offer your pull request.
+You can use the `sample` module as a basis, copy it and modify it for your purposes.
+For any questions you can write to the developer.
+
+
+# Technical details of the development:
+
+1. **classes.py**
+    - names of all tables must start on %modulename%
+    - all classes to be stored in the database must inherit from Base from the `core` module
+2. **controller.py**
+    - the `core` module provides the _db_read_ and _db_write_ decorators, which themselves allocate a connection from dbcp, commit, close, and return the connection to dbcp. They add first session parameter, which does not need to be passed when calling functions.
+    - it is desirable to document in detail the functions of the controller, as other modules can then use them
+    - if the function returns an object from the database, it is important to understand that at the end of the function the session is closed and orm will not be able to load other objects related to the data. It is desirable to load all the necessary data at once. Otherwise, you can change your lazyload settings (see sqlalchemy documentation)
+3. **permanent.py**
+    - all constants are named in uppercase
+    - it is better to name the string using patterns
+        * _MESSAGE__ notification sent to users
+        * _REQUEST__ questions sent to users
+        * _TEXT__ other strings
+4. **source.py**
+    - at the beginning of the code you need to briefly describe the capabilities of the module and specify the author
+    - all code should be placed inside the function *attach_%modulename%_module*
+
+To connect the module, you need to import it into `InnoSchedule.py` and add a brief description to this readme.
+
+
+# General rules to remember
+
+- Do not modify other modules without the permission of the developers of these modules
+- Don't send messages to people without their permission. If the module itself sometimes sends messages, it should be possible to disable them
+- No advertising
+- All bot messages and comments in the code in English. You can offer to choose the language, but English must be there
+- Comment code and use understandable names so that your module can be used by other developers
+- It is advisable to follow PEP8 style
+
+
 # Contacts
+
 Telegram:
-[@Nmikriukov](https://t.me/Nmikriukov)
-[@thedownhill](https://t.me/thedownhill)
+
+[@Nmikriukov](https://t.me/Nmikriukov) - main developer
+
+[@thedownhill](https://t.me/thedownhill) - neighbor of the main developer

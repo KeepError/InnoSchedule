@@ -1,8 +1,6 @@
 
 \.idea/
 
-configs/__pycache__/
-
 \.handler-saves/
 
 test\.py
@@ -12,9 +10,3 @@ __pycache__/
 \.DS_Store
 
 log
-
-settings/token\.py
-
-modules/admin_module\.py
-
-db_test\.sqlite
