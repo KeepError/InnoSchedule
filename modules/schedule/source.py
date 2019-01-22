@@ -59,7 +59,17 @@ def attach_schedule_module():
         Save user`s group choice to database
         """
         core.log(permanent.MODULE_NAME, message)
-        user_course = message.text[:3]
+        # check msg has text
+        if not message.text:
+            core.bot.send_message(message.chat.id, permanent.MESSAGE_ERROR, reply_markup=core.main_markup)
+            return
+        if message.text[:3] in permanent.REGISTERED_COURSES.keys():
+            user_course = message.text[:3]
+        elif message.text[:4] in permanent.REGISTERED_COURSES.keys():
+            user_course = message.text[:4]
+        else:
+            core.bot.send_message(message.chat.id, permanent.MESSAGE_ERROR, reply_markup=core.main_markup)
+            return
         if message.text not in permanent.REGISTERED_COURSES[user_course]:
             core.bot.send_message(message.chat.id, permanent.MESSAGE_ERROR, reply_markup=core.main_markup)
             return
