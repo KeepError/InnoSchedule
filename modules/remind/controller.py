@@ -57,7 +57,7 @@ def get_reminder_times(session):
     :param session: sqlalchmey session from decorator
     :return: [String]
     """
-    start_times = session.query(Lesson.start).all()
+    start_times = session.query(Lesson.start).distinct().all()
     # subtract needed time from lesson start time for reminding in time
     start_times = [datetime.strptime(start_time[0], "%H:%M") - timedelta(minutes=permanent.REMIND_WHEN_LEFT_MINUTES)
                    for start_time in start_times]
