@@ -42,8 +42,6 @@ def get_relevant_reminders(session):
     users = session.query(User).all()
     need_remind = []
     for user in users:
-        if not user.is_configured:
-            continue
         next_lesson = schedule_controller.get_next_lesson(user.id)
         if next_lesson and abs(next_lesson.minutes_until_start - permanent.REMIND_WHEN_LEFT_MINUTES) <= 1:
             need_remind.append((user.id, next_lesson))
