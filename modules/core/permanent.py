@@ -15,15 +15,14 @@ PROXY_ADDRESS = 'deimos.public.opennetwork.cc'
 PROXY_PORT = '1090'
 
 MESSAGE_HI = "Hi there!✋"
-MESSAGE_HELP = "Schedule bot for Innopolis students.\n\n" \
+MESSAGE_HELP = "Schedule open platform for Innopolis students.\n\n" \
                "Some commands, that might be useful for you:\n" \
-               "/configure_schedule manage your settings\n" \
-               "/configure_remind turn reminders on/off\n" \
-               "/friend friend's schedule for now\n" \
-               "/help help\n\n" \
-               "This project is open source and you may contribute:\n" \
+               "/configure_schedule - change group settings\n" \
+               "/configure_remind - change reminders settings\n" \
+               "/friend - show current and next friend's lessons\n" \
+               "/help\n\n" \
+               "Anyone could easily add his own functionality:\n" \
                "https://gitlab.com/Louie_ru/InnoSchedule\n" \
-               "We are unable to track all changes in schedule. " \
                "In case of changes, please inform us or offer db change on gitlab\n" \
                "@Nmikriukov @thedownhill"
 MESSAGE_ERROR = "Sorry, I did not understand you"
