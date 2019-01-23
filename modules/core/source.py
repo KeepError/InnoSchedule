@@ -24,9 +24,9 @@ Author: @Nmikriukov
 """
 
 bot = telebot.TeleBot(token)
-# Save step handlers in file and load in case of restart
-bot.enable_save_next_step_handlers()
-bot.load_next_step_handlers()
+# Save step handlers in file and load in case of restart; Has some bug
+# bot.enable_save_next_step_handlers()
+# bot.load_next_step_handlers()
 
 # main three buttons are declared here
 main_markup = telebot.types.ReplyKeyboardMarkup(True)
