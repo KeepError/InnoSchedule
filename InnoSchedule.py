@@ -11,4 +11,4 @@ attach_admin_module()
 attach_schedule_module()
 attach_remind_module()
 # compose attached modules and start listening
-compose_attached_modules(set_proxy=False, restart_on_crash=True)
+compose_attached_modules(set_proxy=False)

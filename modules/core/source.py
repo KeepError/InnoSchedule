@@ -101,7 +101,7 @@ def attach_core_module():
             bot.send_message(message.chat.id, permanent.MESSAGE_HELP, reply_markup=main_markup)
 
 
-def compose_attached_modules(set_proxy=False, restart_on_crash=True):
+def compose_attached_modules(set_proxy=False):
 
     @bot.message_handler()
     def garbage_message_handler(message):
@@ -123,7 +123,4 @@ def compose_attached_modules(set_proxy=False, restart_on_crash=True):
     Base.metadata.create_all(db_engine)
 
     # start listening for user`s messages
-    if restart_on_crash:
-        bot.infinity_polling(none_stop=True, timeout=50)
-    else:
-        bot.polling(none_stop=False, timeout=50)
+    bot.polling(none_stop=False, timeout=50)
