@@ -47,7 +47,12 @@ def log(module, message):
     date :: time :: module_name :: user_alias :: message_text
     String's length is extended to static length due to visual intelligibility
     """
-    logger.info(f"{module.rjust(15)} :: {message.from_user.username.rjust(20)} :: "
+    # log id of user if no alias exist
+    if message.from_user.username:
+        user = message.from_user.username
+    else:
+        user = str(message.from_user.id)
+    logger.info(f"{module.rjust(15)} :: {user.rjust(20)} :: "
                 f"{message.text if message.text else '--not_text--'}")
 
 
