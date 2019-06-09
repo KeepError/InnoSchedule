@@ -25,7 +25,8 @@ MESSAGE_SETTINGS_SAVED = "Your schedule settings have been saved successfully!"
 REQUEST_COURSE = "What's your course?"
 REQUEST_GROUP = "What's your group?"
 REQUEST_ENGLISH = "What's your English group?"
-REQUEST_ALIAS = "What's your friend's alias?"
+REQUEST_ALIAS = "What's your friend's alias?\n" \
+                "By the way, now you can just send friend_alias without calling these command"
 REQUEST_WEEKDAY = "Select some day of the week"
 
 HEADER_NOW = "\n"

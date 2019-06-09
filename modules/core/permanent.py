@@ -20,6 +20,7 @@ MESSAGE_HELP = "Schedule open platform for Innopolis students.\n\n" \
                "/configure_schedule - change group settings\n" \
                "/configure_remind - change reminders settings\n" \
                "/friend - show current and next friend's lessons\n" \
+               "   or you can just send his alias directly\n" \
                "/help\n\n" \
                "Anyone could easily add his own functionality:\n" \
                "https://gitlab.com/Louie_ru/InnoSchedule\n" \
