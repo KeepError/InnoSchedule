@@ -1,14 +1,17 @@
 import functools
 import logging
 from logging.handlers import RotatingFileHandler
+import threading
+import time
 
 import telebot
+import schedule
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-from modules.admin.permanent import token  # private bot token
 from modules.core import permanent
+from modules.admin.permanent import ADMIN_NOTIFY_LIST, token  # private bot token
 from modules.schedule.permanent import TEXT_BUTTON_NOW, TEXT_BUTTON_DAY, TEXT_BUTTON_WEEK
 
 """
@@ -59,7 +62,7 @@ def log(module, message):
 # sqlalchemy base for classes declaration and mapping to tables
 Base = declarative_base()
 # default connection pool size is 5
-db_engine = create_engine("sqlite:///db.sqlite3")
+db_engine = create_engine(f"sqlite:///{permanent.DATABASE_FOLDER}/{permanent.DATABASE_NAME}")
 # allows to receive connections from pool
 Session = sessionmaker(bind=db_engine)
 
@@ -87,6 +90,10 @@ def db_write(function):
     return wrapper
 
 
+# should be done after all db imports done
+from modules.schedule.controller import get_user
+
+
 def attach_core_module():
 
     @bot.message_handler(commands=['start', 'help'])
@@ -112,12 +119,27 @@ def compose_attached_modules(set_proxy=False):
         log(permanent.MODULE_NAME, message)
         # show main buttons if unknown input sent
         bot.send_message(message.chat.id, permanent.MESSAGE_ERROR, reply_markup=main_markup)
+        alias = get_user(message.from_user.id).alias
+        for admin in ADMIN_NOTIFY_LIST:
+            bot.send_message(admin, f"{permanent.MESSAGE_UNKNOWN} {str(alias)}:\n{message.text}")
 
     # set proxy if needed (thx ro roskomnadzor)
     if set_proxy:
         telebot.apihelper.proxy = {
             permanent.PROXY_PROTOCOL: f'{permanent.PROXY_SOCKS}://{permanent.PROXY_LOGIN}:'
                                       f'{permanent.PROXY_PASSWORD}@{permanent.PROXY_ADDRESS}:{permanent.PROXY_PORT}'}
+
+    def pending():
+        """
+        Function is running in background thread and wake schedule to check if some action should be made
+        """
+        while 1:
+            schedule.run_pending()
+            time.sleep(30)
+
+    # start pending to wake up when needed to make some action
+    # daemon=True means die if main thread dies
+    threading.Thread(target=pending, daemon=True).start()
 
     # ensure database schema is correct
     Base.metadata.create_all(db_engine)
