@@ -10,7 +10,7 @@ This bot is written for Innopolis University students. It has a modular architec
 
 # How it works
 
-- `python3` was developed on version 3.7, but can work with earlier versions
+- `python3` was developed on version 3.7
 - `PyTelegramBotAPI` for work with telegram api
 - `sqlalchemy` ORM
 - `sqlite3` database
@@ -28,6 +28,7 @@ At the moment there are 5 modules:
 3. `schedule ` allows you to get the schedule for a specific time or day of the week, as well as to see the schedule of friends
 4. `remind` sends out reminders about coming lesson
 5. `sample` is a working example of a simple module. It will be useful for those who want to add their own module
+6. `autoparser` automatically parse schedule from google sheets
 
 
 # Install and run
@@ -51,14 +52,14 @@ Before creating your module, it is recommended to read the documentation of the 
 - [sqlalchemy query API](https://docs.sqlalchemy.org/en/latest/orm/query.html)
 - [sqlalchemy relationship patterns](https://docs.sqlalchemy.org/en/latest/orm/basic_relationships.html)
 
-The module consists of 4 main parts:
+Each module consists of 4 main parts:
 
 1. `source.py` basic code for registering commands and functions to work with users
 2. `classes.py ` classes used by the module. Described in sqlalchemy format for mapping to database by orm
-3. `controller.py` functions for working with the database. The main code does not work with the base directly, but through the controller
+3. `controller.py` functions for working with the database. The main code does not work with database directly, but through the controller
 4. `permanent.py ` stores all constant values such as strings, module settings, etc. 
 
-To add a module to the main branch, you need to make a fork of the repository and offer your pull request.
+To add new module to the main branch, you need to make a fork of the repository and offer your pull request.
 You can use the `sample` module as a basis, copy it and modify it for your purposes.
 For any questions you can write to the developer.
 
