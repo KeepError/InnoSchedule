@@ -11,13 +11,8 @@ user_group_association = Table('schedule_user_group_association', Base.metadata,
                                Column('user', Integer, ForeignKey('schedule_users.id')),
                                Column('group', Integer, ForeignKey('schedule_groups.name')))
 
-# what lessons does the group has
-group_lesson_association = Table('schedule_group_lesson_association', core.Base.metadata,
-                                 Column('group', Integer, ForeignKey('schedule_groups.name')),
-                                 Column('lesson', Integer, ForeignKey('schedule_lessons.id')))
 
 class User(Base):
-class User(core.Base):
     __tablename__ = "schedule_users"
 
     id = Column(Integer, primary_key=True)
@@ -37,7 +32,7 @@ class Group(Base):
     __tablename__ = 'schedule_groups'
 
     name = Column(String, primary_key=True)
-    lessons = relationship("Lesson", secondary=group_lesson_association)
+    lessons = relationship("Lesson", backref=backref("schedule_groups"))
 
     def __repr__(self):
         return f"Group({self.name})"
@@ -46,15 +41,23 @@ class Group(Base):
 class Lesson(Base):
     __tablename__ = "schedule_lessons"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    id = Column(Integer, primary_key=True)
+    group = Column(String, ForeignKey('schedule_groups.name'))
     subject = Column(String)
-    teacher_id = Column(Integer, ForeignKey('schedule_teachers.id'))
-    teacher = relationship("Teacher", backref=backref("schedule_lessons", uselist=False), lazy='joined')
+    teacher = Column(String)
     day = Column(Integer)
-    type_ = Column(Integer)
     start = Column(String)
     end = Column(String)
     room = Column(Integer)
+
+    def __init__(self, group, subject, teacher, day, start, end, room):
+        self.group = group
+        self.subject = subject
+        self.teacher = teacher
+        self.day = day
+        self.start = start
+        self.end = end
+        self.room = room
 
     def __repr__(self):
         return f"Lesson({self.subject}, {self.start})"
@@ -136,14 +139,3 @@ class Lesson(Base):
         hours_until_start = self.minutes_until_start // 60
         return f"{self}▶ ️{str(hours_until_start)+'h ' if hours_until_start > 0 else ''}" \
                f"{self.minutes_until_start % 60}m\n"
-
-
-class Teacher(core.Base):
-    __tablename__ = "schedule_teachers"
-
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String)
-    gender = Column(Boolean)
-
-    def __repr__(self):
-        return f"Teacher({self.name}, {self.gender})"

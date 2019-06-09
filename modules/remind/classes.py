@@ -1,9 +1,9 @@
 from sqlalchemy import Column, Integer
 
-from modules.core import source as core
+from modules.core.source import Base
 
 
-class User(core.Base):
+class User(Base):
     """
     Remind module users
     Stored to remember who wants to be reminded
@@ -11,7 +11,7 @@ class User(core.Base):
 
     __tablename__ = "remind_users"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, unique=True)
 
     def __init__(self, id_):
         self.id = id_

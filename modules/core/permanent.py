@@ -1,7 +1,9 @@
 MODULE_NAME = "core"
+DATABASE_FOLDER = "modules/admin/db"
+DATABASE_NAME = "db.sqlite3"
 
 LOG_FILE_NAME = 'log'
-LOG_MAX_SIZE_BYTES = 1024 * 1024  # MB
+LOG_MAX_SIZE_BYTES = 1024 * 1024 * 10  # 10 MB
 LOG_NAME = 'logger'
 LOG_BACKUP_COUNT = 1
 LOG_MESSAGE_FORMAT = "%(asctime)s :: %(message)s"
@@ -24,6 +26,6 @@ MESSAGE_HELP = "Schedule open platform for Innopolis students.\n\n" \
                "/help\n\n" \
                "Anyone could easily add his own functionality:\n" \
                "https://gitlab.com/Louie_ru/InnoSchedule\n" \
-               "In case of changes, please inform us or offer db change on gitlab\n" \
                "@Nmikriukov @thedownhill"
 MESSAGE_ERROR = "Sorry, I did not understand you"
+MESSAGE_UNKNOWN = "Unknown message from"

@@ -2,12 +2,12 @@ from datetime import timedelta, datetime
 
 from modules.remind.classes import User
 from modules.schedule.classes import Lesson
-from modules.core import source as core
+from modules.core.source import db_read, db_write
 from modules.remind import permanent
 from modules.schedule import controller as schedule_controller
 
 
-@core.db_write
+@db_write
 def register_user(session, user_id):
     """
     Register user to send him reminders
@@ -15,10 +15,13 @@ def register_user(session, user_id):
     :param session: sqlalchmey session from decorator
     :param user_id: int
     """
+    # check user is not registered yet
+    if session.query(User).filter_by(id=user_id).count() > 0:
+        return
     session.add(User(user_id))
 
 
-@core.db_write
+@db_write
 def delete_user(session, user_id):
     """
     Delete user so no reminders will be send
@@ -29,7 +32,7 @@ def delete_user(session, user_id):
     session.query(User).filter_by(id=user_id).delete()
 
 
-@core.db_read
+@db_read
 def get_relevant_reminders(session):
     """
     Function is called in fixed amount of minutes before each lesson (e.g. 10 minutes)
@@ -48,7 +51,7 @@ def get_relevant_reminders(session):
     return need_remind
 
 
-@core.db_read
+@db_read
 def get_reminder_times(session):
     """
     Function is called once when remind module is attached
