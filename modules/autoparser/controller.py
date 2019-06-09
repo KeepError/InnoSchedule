@@ -7,7 +7,7 @@ def delete_all_lessons(session):
     """
     Delete all lessons from table to parse new ones
 
-    :param session: sqlalchmey session from decorator
+    :param session: sqlalchemy session from decorator
     """
     session.query(Lesson).delete()
 
@@ -17,7 +17,7 @@ def insert_lesson(session, group, subject, teacher, day, start, end, room):
     """
     Insert new lesson with given parameters
 
-    :param session: sqlalchmey session from decorator
+    :param session: sqlalchemy session from decorator
     :param group: string
     :param subject: string
     :param teacher: string

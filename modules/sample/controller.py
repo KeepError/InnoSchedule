@@ -7,7 +7,7 @@ def register_user(session, user_id, string):
     """
     Register user to send him reminders
 
-    :param session: sqlalchmey session from decorator
+    :param session: sqlalchemy session from decorator
     :param user_id: int
     :param string: string
     """
@@ -19,7 +19,7 @@ def set_string(session, user_id, string):
     """
     Set user's string
 
-    :param session: sqlalchmey session from decorator
+    :param session: sqlalchemy session from decorator
     :param user_id: int
     :param string: string
     """
@@ -31,7 +31,7 @@ def get_string(session, user_id):
     """
     Get user's string or None if no such found
 
-    :param session: sqlalchmey session from decorator
+    :param session: sqlalchemy session from decorator
     :param user_id: int
     :return: string or None
     """

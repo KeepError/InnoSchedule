@@ -12,7 +12,7 @@ def register_user(session, user_id):
     """
     Register user to send him reminders
 
-    :param session: sqlalchmey session from decorator
+    :param session: sqlalchemy session from decorator
     :param user_id: int
     """
     # check user is not registered yet
@@ -26,7 +26,7 @@ def delete_user(session, user_id):
     """
     Delete user so no reminders will be send
 
-    :param session: sqlalchmey session from decorator
+    :param session: sqlalchemy session from decorator
     :param user_id: int
     """
     session.query(User).filter_by(id=user_id).delete()
@@ -39,7 +39,7 @@ def get_relevant_reminders(session):
     Returns list of tuples with user ids and lessons.
     Each user in tuple must be reminded about his lesson
 
-    :param session: sqlalchmey session from decorator
+    :param session: sqlalchemy session from decorator
     :return: [(int, Lesson)]
     """
     users = session.query(User).all()
@@ -57,7 +57,7 @@ def get_reminder_times(session):
     Function is called once when remind module is attached
     Return list of times in 'hh:mm' format, when reminders should be sent every day
 
-    :param session: sqlalchmey session from decorator
+    :param session: sqlalchemy session from decorator
     :return: [String]
     """
     start_times = session.query(Lesson.start).distinct().all()

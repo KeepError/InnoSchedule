@@ -9,7 +9,7 @@ def get_day_lessons(session, user_id, day):
     """
     Function return lessons for user on exact weekday sorted by start time
 
-    :param session: sqlalchmey session from decorator
+    :param session: sqlalchemy session from decorator
     :param user_id:  int
     :param day:  int [0-6]
     :return: [Lesson]
@@ -55,7 +55,7 @@ def append_user_group(session, user_id, group):
     """
     Add user to group
 
-    :param session: sqlalchmey session from decorator
+    :param session: sqlalchemy session from decorator
     :param user_id: int
     :param group: string
     """
@@ -72,7 +72,7 @@ def get_user(session, user_id):
     Get instance of concrete module user
     Note that session will be closed and any changes to this instance will be ignored
 
-    :param session: sqlalchmey session from decorator
+    :param session: sqlalchemy session from decorator
     :param user_id: int
     :return: User
     """
@@ -84,7 +84,7 @@ def register_user(session, user_id, alias):
     """
     Register new user in module
 
-    :param session: sqlalchmey session from decorator
+    :param session: sqlalchemy session from decorator
     :param user_id: int
     :param alias: string
     """
@@ -97,7 +97,7 @@ def get_user_by_alias(session, alias):
     Return User instance by his telegram alias or None if user not found
     Note that session will be closed and any changes to this instance will be ignored
 
-    :param session: sqlalchmey session from decorator
+    :param session: sqlalchemy session from decorator
     :param alias: string
     :return: User
     """
@@ -109,7 +109,7 @@ def set_user_alias(session, user_id, alias):
     """
     Update user`s alias in database
 
-    :param session: sqlalchmey session from decorator
+    :param session: sqlalchemy session from decorator
     :param user_id: int
     :param alias: string
     """
@@ -125,7 +125,7 @@ def set_user_configured(session, user_id, configured):
         True if all his groups are added
         False and delete all his groups (when user starts configuration of his groups)
 
-    :param session: sqlalchmey session from decorator
+    :param session: sqlalchemy session from decorator
     :param user_id: int
     :param configured: boolean
     """
