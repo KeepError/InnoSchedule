@@ -3,11 +3,11 @@ from datetime import datetime
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy import Column, Integer, String, Table, ForeignKey, Boolean
 
-from modules.core import source as core
+from modules.core.source import Base
 
 
 # what groups does the user belong to
-user_group_association = Table('schedule_user_group_association', core.Base.metadata,
+user_group_association = Table('schedule_user_group_association', Base.metadata,
                                Column('user', Integer, ForeignKey('schedule_users.id')),
                                Column('group', Integer, ForeignKey('schedule_groups.name')))
 
@@ -16,7 +16,7 @@ group_lesson_association = Table('schedule_group_lesson_association', core.Base.
                                  Column('group', Integer, ForeignKey('schedule_groups.name')),
                                  Column('lesson', Integer, ForeignKey('schedule_lessons.id')))
 
-
+class User(Base):
 class User(core.Base):
     __tablename__ = "schedule_users"
 
@@ -33,7 +33,7 @@ class User(core.Base):
         return f"User({self.id}, {self.alias})"
 
 
-class Group(core.Base):
+class Group(Base):
     __tablename__ = 'schedule_groups'
 
     name = Column(String, primary_key=True)
@@ -43,7 +43,7 @@ class Group(core.Base):
         return f"Group({self.name})"
 
 
-class Lesson(core.Base):
+class Lesson(Base):
     __tablename__ = "schedule_lessons"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -110,8 +110,8 @@ class Lesson(core.Base):
 
         :return: String
         """
-        return f"{self.subject} {self.type_}\n"\
-               f"{'👨' if self.teacher.gender else '👩'} {self.teacher.name}\n"\
+        return f"{self.subject}\n"\
+               f"👨‍🏫 {self.teacher}\n"\
                f"🕐 {self.start} 	— {self.end}\n" \
                f"🚪 {self.room}\n"
 

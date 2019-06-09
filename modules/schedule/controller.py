@@ -1,10 +1,10 @@
 from datetime import datetime
 
 from modules.schedule.classes import User, Group
-from modules.core import source as core
+from modules.core.source import db_read, db_write
 
 
-@core.db_read
+@db_read
 def get_day_lessons(session, user_id, day):
     """
     Function return lessons for user on exact weekday sorted by start time
@@ -50,7 +50,7 @@ def get_next_lesson(user_id):
             return lesson
 
 
-@core.db_write
+@db_write
 def append_user_group(session, user_id, group):
     """
     Add user to group
@@ -66,7 +66,7 @@ def append_user_group(session, user_id, group):
     user.groups.append(group)
 
 
-@core.db_read
+@db_read
 def get_user(session, user_id):
     """
     Get instance of concrete module user
@@ -79,7 +79,7 @@ def get_user(session, user_id):
     return session.query(User).filter_by(id=user_id).first()
 
 
-@core.db_write
+@db_write
 def register_user(session, user_id, alias):
     """
     Register new user in module
@@ -91,7 +91,7 @@ def register_user(session, user_id, alias):
     session.add(User(user_id, alias))
 
 
-@core.db_read
+@db_read
 def get_user_by_alias(session, alias):
     """
     Return User instance by his telegram alias or None if user not found
@@ -104,7 +104,7 @@ def get_user_by_alias(session, alias):
     return session.query(User).filter_by(alias=alias).first()
 
 
-@core.db_write
+@db_write
 def set_user_alias(session, user_id, alias):
     """
     Update user`s alias in database
@@ -118,7 +118,7 @@ def set_user_alias(session, user_id, alias):
         user.alias = alias
 
 
-@core.db_write
+@db_write
 def set_user_configured(session, user_id, configured):
     """
     Set user is_configured to
