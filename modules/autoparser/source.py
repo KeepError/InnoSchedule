@@ -145,6 +145,7 @@ def attach_autoparser_module():
                     # send error notification to admins
                     for admin in ADMIN_NOTIFY_LIST:
                         bot.send_message(admin, f"{permanent.MESSAGE_ERROR_PARSE_SYNTAX} row={row} col={col}")
+                    continue
 
                 subject, teacher, room = cell_new[0], cell_new[1], cell_new[2]
                 # extract time
