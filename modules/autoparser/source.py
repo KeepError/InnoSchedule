@@ -17,9 +17,6 @@ Module automatically parse schedule from google sheet and modify database
 Author: @Nmikriukov
 """
 
-# global because used by other modules
-parse_schedule_func = None
-
 
 def attach_autoparser_module():
 
@@ -172,7 +169,6 @@ def attach_autoparser_module():
         # controller.insert_lesson("B17-03", "SQL injections", "Nikolai Mikriukov", 0, "13:37", "15:00", 108)
 
     # open parse function to other modules
-    global parse_schedule_func
-    parse_schedule_func = parse_new_timetable
+    attach_autoparser_module.parse_schedule_func = parse_new_timetable
     # add parse function call to schedule on each day
     schedule.every().day.at(permanent.ADMIN_NOTIFY_TIME).do(parse_new_timetable)
