@@ -6,7 +6,7 @@ from sqlalchemy import Column, Integer, String, Table, ForeignKey, Boolean
 from modules.core.source import Base
 
 
-# what groups does the user belong to
+# what groups does user belongs to
 user_group_association = Table('schedule_user_group_association', Base.metadata,
                                Column('user', Integer, ForeignKey('schedule_users.id')),
                                Column('group', Integer, ForeignKey('schedule_groups.name')))
@@ -116,7 +116,7 @@ class Lesson(Base):
         return f"{self.subject}\n"\
                f"👨‍🏫 {self.teacher}\n"\
                f"🕐 {self.start} 	— {self.end}\n" \
-               f"🚪 {self.room}\n"
+               f"🚪 {self.room if self.room != -1 else '?'}\n"
 
     def get_str_current(self):
         """

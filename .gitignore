@@ -5,6 +5,8 @@
 
 test\.py
 
+venv/
+
 __pycache__/
 
 \.DS_Store
@@ -14,3 +16,5 @@ log
 modules/admin/
 
 nohup\.out
+
+.kateproject

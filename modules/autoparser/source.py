@@ -48,27 +48,28 @@ def attach_autoparser_module():
                  None, None, None | if empty cell
                  -1, None, None   | if unknown data in cell
         """
-        text = get_value(ws, row, col)
-        if text is None or len(text) < 5:
-            return None, None, None
-        splitted = text.split('\n')
-
-        # english lessons are set manually in the bottom
-        if len(splitted) == 2 and "English" in splitted[0]:
-            # lesson, room = splitted[0], splitted[1]
-            return None, None, None
-        elif len(splitted) == 3:
-            lesson, teacher, room = splitted[0], splitted[1], splitted[2]
-        else:  # unknown data
-            return -1, None, None
+        lesson = get_value(ws, row, col)
+        teacher = get_value(ws, row + 1, col)
+        room = get_value(ws, row + 2, col)
+        if not lesson or len(lesson) < 2:
+            return None, None, None  # empty cell
 
         # remove () brackets and strip
         if lesson:
             lesson = re.sub(r"\(.+\)", "", lesson).strip()
         if teacher:
             teacher = re.sub(r"\(.+\)", "", teacher).strip()
-        if room:
+        if isinstance(room, str):
             room = re.sub(r"\(.+\)", "", room).strip()
+
+        if not teacher:  # unknown teacher
+            teacher = '?'
+        try:
+            room = int(room)
+        except TypeError:
+            room = -1
+        except ValueError:  # unknown room
+            return -1, None, None
 
         return lesson, teacher, room
 
@@ -129,22 +130,31 @@ def attach_autoparser_module():
             ws_old = wb_old[wb_old.sheetnames[0]]
 
         # iterate over each cell
-        for col in range(2, permanent.SCHEDULE_LAST_COLUMN + 1):
-            course_group = get_value(ws, 1, col)
-            cur_weekday = -1
-            for row in range(2, permanent.SCHEDULE_LAST_ROW + 1):
+        col = 2
+        while col <= permanent.SCHEDULE_LAST_COLUMN:
+            course_group = get_value(ws, 2, col)
+
+            if course_group[:3] == "B19":
+                course_group = course_group[:6] + ('-a' if col % 2 == 0 else '-b')
+
+            cur_weekday = 0
+            row = 4
+            while row <= permanent.SCHEDULE_LAST_ROW:
                 first_col_value = get_value(ws, row, 1)  # time or weekday
-                if first_col_value in permanent.WEEKDAYS:
+                if isinstance(first_col_value, str) and first_col_value.upper() in permanent.WEEKDAYS:
                     cur_weekday += 1
+                    row += 1
                     continue
 
                 cell_new = parse_cell(ws, row, col)
                 if not cell_new[0]:
+                    row += 3
                     continue
                 if cell_new[0] == -1:
                     # send error notification to admins
                     for admin in ADMIN_NOTIFY_LIST:
                         bot.send_message(admin, f"{permanent.MESSAGE_ERROR_PARSE_SYNTAX} row={row} col={col}")
+                    row += 3
                     continue
 
                 subject, teacher, room = cell_new[0], cell_new[1], cell_new[2]
@@ -165,6 +175,8 @@ def attach_autoparser_module():
 
                 # insert new lesson to database
                 controller.insert_lesson(course_group, subject, teacher, cur_weekday, start_time, end_time, room)
+                row += 3
+            col += 1
 
         # add special lessons here manually
         # controller.insert_lesson("B17-03", "SQL injections", "Nikolai Mikriukov", 0, "13:37", "15:00", 108)
