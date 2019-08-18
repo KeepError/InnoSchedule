@@ -1,6 +1,8 @@
 import re
 import requests
 import shutil
+from functools import reduce
+from operator import concat
 
 from openpyxl import load_workbook
 import schedule
@@ -9,6 +11,7 @@ from modules.autoparser import controller
 from modules.autoparser import permanent
 from modules.core.permanent import DATABASE_FOLDER, DATABASE_NAME
 from modules.core.source import bot
+from modules.schedule.permanent import REGISTERED_COURSES
 from modules.admin.permanent import SUPERADMIN_LIST
 
 """
@@ -131,8 +134,14 @@ def attach_autoparser_module():
 
         # iterate over each cell
         col = 2
+        all_course_groups = reduce(concat, [REGISTERED_COURSES[x] for x in REGISTERED_COURSES])
         while col <= permanent.SCHEDULE_LAST_COLUMN:
             course_group = get_value(ws, 2, col)
+            if course_group not in all_course_groups:
+                for admin in SUPERADMIN_LIST:
+                    bot.send_message(admin, f"{permanent.MESSAGE_ERROR_UNKNOWN_GROUP}: {course_group}")
+                col += 1
+                continue
 
             if course_group[:3] == "B19":
                 course_group = course_group[:6] + ('-a' if col % 2 == 0 else '-b')
