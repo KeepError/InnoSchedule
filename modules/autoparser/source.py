@@ -9,7 +9,7 @@ from modules.autoparser import controller
 from modules.autoparser import permanent
 from modules.core.permanent import DATABASE_FOLDER, DATABASE_NAME
 from modules.core.source import bot
-from modules.admin.permanent import ADMIN_NOTIFY_LIST
+from modules.admin.permanent import SUPERADMIN_LIST
 
 """
 Module automatically parse schedule from google sheet and modify database
@@ -112,7 +112,7 @@ def attach_autoparser_module():
                 raise ScheduleDownloadError
         except (FileNotFoundError, ScheduleDownloadError):
             # send error notification to admins
-            for admin in ADMIN_NOTIFY_LIST:
+            for admin in SUPERADMIN_LIST:
                 bot.send_message(admin, permanent.MESSAGE_ERROR_NOTIFY)
             return
 
@@ -152,7 +152,7 @@ def attach_autoparser_module():
                     continue
                 if cell_new[0] == -1:
                     # send error notification to admins
-                    for admin in ADMIN_NOTIFY_LIST:
+                    for admin in SUPERADMIN_LIST:
                         bot.send_message(admin, f"{permanent.MESSAGE_ERROR_PARSE_SYNTAX} row={row} col={col}")
                     row += 3
                     continue
@@ -167,7 +167,7 @@ def attach_autoparser_module():
                     cell_old = parse_cell(ws_old, row, col)
                     if cell_new != cell_old:
                         subject_old, teacher_old, room_old = cell_old[0], cell_old[1], cell_old[2]
-                        for admin in ADMIN_NOTIFY_LIST:
+                        for admin in SUPERADMIN_LIST:
                             # send changes to admin
                             bot.send_message(admin, f"{course_group} {first_col_value} changed:\n"
                                                     f"Was {subject_old}, {teacher_old}, {room_old}\n"

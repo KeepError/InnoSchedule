@@ -11,7 +11,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 from modules.core import permanent
-from modules.admin.permanent import ADMIN_NOTIFY_LIST, token  # private bot token
+from modules.admin.permanent import SUPERADMIN_LIST, token  # private bot token
 from modules.schedule.permanent import TEXT_BUTTON_NOW, TEXT_BUTTON_DAY, TEXT_BUTTON_WEEK
 
 """
@@ -120,7 +120,7 @@ def compose_attached_modules(set_proxy=False):
         # show main buttons if unknown input sent
         bot.send_message(message.chat.id, permanent.MESSAGE_ERROR, reply_markup=main_markup)
         alias = get_user(message.from_user.id).alias
-        for admin in ADMIN_NOTIFY_LIST:
+        for admin in SUPERADMIN_LIST:
             bot.send_message(admin, f"{permanent.MESSAGE_UNKNOWN} {str(alias)}:\n{message.text}")
 
     # set proxy if needed (thx ro roskomnadzor)
