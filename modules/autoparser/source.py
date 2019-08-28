@@ -69,10 +69,8 @@ def attach_autoparser_module():
             teacher = '?'
         try:
             room = int(room)
-        except TypeError:
+        except (TypeError, ValueError):
             room = -1
-        except ValueError:  # unknown room
-            return -1, None, None
 
         return lesson, teacher, room
 
