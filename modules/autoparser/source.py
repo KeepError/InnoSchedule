@@ -168,7 +168,6 @@ def attach_autoparser_module():
                 # extract time
                 time_splitted = first_col_value.split('-')
                 start_time, end_time = time_splitted[0], time_splitted[1]
-
                 if compare_with_prev:
                     # compare new cell with old one
                     cell_old = parse_cell(ws_old, row, col)

@@ -120,8 +120,9 @@ def compose_attached_modules(set_proxy=False):
         # show main buttons if unknown input sent
         bot.send_message(message.chat.id, permanent.MESSAGE_ERROR, reply_markup=main_markup)
         alias = get_user(message.from_user.id).alias
-        for admin in SUPERADMIN_LIST:
-            bot.send_message(admin, f"{permanent.MESSAGE_UNKNOWN} {str(alias)}:\n{message.text}")
+        if ' ' in message.text:
+            for admin in SUPERADMIN_LIST:
+                bot.send_message(admin, f"{permanent.MESSAGE_UNKNOWN} {str(alias)}:\n{message.text}")
 
     # set proxy if needed (thx ro roskomnadzor)
     if set_proxy:
