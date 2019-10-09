@@ -1,0 +1,8 @@
+
+__pycache__/
+
+db/db.old.sqlite3
+
+db/schedule.old.xlsx
+
+db/schedule.xlsx
