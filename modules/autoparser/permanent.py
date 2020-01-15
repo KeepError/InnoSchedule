@@ -9,9 +9,9 @@ SCHEDULE_NAME = "schedule.xlsx"
 SCHEDULE_BACKUP_1 = "schedule.old.xlsx"
 SCHEDULE_BACKUP_2 = "schedule.old.old.xlsx"
 SCHEDULE_DOWNLOAD_LINK = "https://docs.google.com/spreadsheet/ccc?" \
-                         "key=1wbfE26tAionZMKUWoMsir_ldC5IocmhG8kE8PrTP0WA&output=xlsx"
+                         "key=1H3SYKtt1_E_kqJ9REG9hWAJskpSDTrRKHe6tSglv5_0&output=xlsx"
 SCHEDULE_MIN_SIZE_BYTES = 30 * 1024
-SCHEDULE_LAST_COLUMN = 36
+SCHEDULE_LAST_COLUMN = 35
 SCHEDULE_LAST_ROW = 134
 
 MESSAGE_ERROR_NOTIFY = "Schedule parse error occurred. Please check manually."

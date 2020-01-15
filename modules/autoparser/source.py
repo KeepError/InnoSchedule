@@ -57,6 +57,9 @@ def attach_autoparser_module():
         if not lesson or len(lesson) < 2:
             return None, None, None  # empty cell
 
+        if "reserve" in lesson.lower():
+            return None, None, None
+
         # remove () brackets and strip
         if lesson:
             lesson = re.sub(r"\(.+\)", "", lesson).strip()
