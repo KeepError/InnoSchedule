@@ -15,7 +15,6 @@ Authors: @Nmikriukov @thedownhill
 
 
 def attach_schedule_module():
-
     @bot.message_handler(commands=['friend', 'configure_schedule'])
     def schedule_command_handler(message):
         """

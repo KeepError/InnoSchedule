@@ -7,3 +7,6 @@ urllib3
 schedule
 file_read_backwards
 openpyxl
+# calendar module
+pytz
+icalendar
