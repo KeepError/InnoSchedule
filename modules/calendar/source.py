@@ -4,7 +4,7 @@ from os.path import exists
 from os import mkdir
 import shutil
 
-from icalendar import Calendar, Event, vRecur, vDatetime
+from icalendar import Calendar, Event, Timezone, TimezoneStandard, vRecur, vDatetime
 
 from modules.core.source import bot, log
 from modules.calendar import controller, permanent
@@ -41,6 +41,20 @@ def generate_calendar(group: str):
     c.add('prodid', 'InnoSchedule bot')
     c.add('version', '2.0')
 
+    # reference: https://github.com/collective/icalendar/blob/master/src/icalendar/tests/test_timezoned.py
+    tz = Timezone()
+    tz.add('tzid', permanent.TIMEZONE)
+    tz.add('x-lic-location', permanent.TIMEZONE)
+
+    tzs = TimezoneStandard()
+    dt = datetime.now(permanent.TIMEZONE)
+    tzs.add('tzname', dt.strftime("%Z"))
+    tzs.add('TZOFFSETFROM', permanent.TIMEZONE.utcoffset(datetime.now()))
+    tzs.add('TZOFFSETTO', permanent.TIMEZONE.utcoffset(datetime.now()))
+
+    tz.add_component(tzs)
+    c.add_component(tz)
+
     for day in range(permanent.WEEK_LENGTH):
         current_day = permanent.SEMESTER_START + timedelta(days=day)
         lessons = controller.get_lessons(group, current_day.weekday())
@@ -48,11 +62,11 @@ def generate_calendar(group: str):
             for lesson in lessons:
                 event = Event()
                 event.add('summary', f"{lesson.subject} with {lesson.teacher}")
-                event.add("dtstart",
-                          datetime.combine(current_day, lesson.start_struct.time(), tzinfo=permanent.TIMEZONE))
-                event.add("dtend",
-                          datetime.combine(current_day, lesson.end_struct.time(), tzinfo=permanent.TIMEZONE))
-                event.add('dtstamp', datetime.now(permanent.TIMEZONE))
+                event.add("dtstart", vDatetime(
+                    datetime.combine(current_day, lesson.start_struct.time(), tzinfo=permanent.TIMEZONE)))
+                event.add("dtend", vDatetime(
+                    datetime.combine(current_day, lesson.end_struct.time(), tzinfo=permanent.TIMEZONE)))
+                event.add('dtstamp', vDatetime(datetime.now(permanent.TIMEZONE)))
                 event.add("rrule", vRecur(freq="WEEKLY", byday=day_abbreviation[current_day.weekday()],
                                           interval=1, count=permanent.SEMESTER_LENGTH))
                 event.add("uid", f"{vDatetime(datetime.now()).to_ical().decode()}-{random()}")
