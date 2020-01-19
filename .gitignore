@@ -18,3 +18,5 @@ modules/admin/
 nohup\.out
 
 .kateproject
+
+modules/calendar/ics/
