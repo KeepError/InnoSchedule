@@ -18,7 +18,7 @@ This bot is written for Innopolis University students. It has a modular architec
 
 # Existing modules
 
-At the moment there are 5 modules:
+At the moment there are modules:
 
 1. `core` is the head module that links everything together. Contains all the necessary functionality for other modules:
     - work with Telegram API
@@ -29,7 +29,7 @@ At the moment there are 5 modules:
 4. `remind` sends out reminders about coming lesson
 5. `sample` is a working example of a simple module. It will be useful for those who want to add their own module
 6. `autoparser` automatically parse schedule from google sheets
-
+7. `calendar` export schedule in .ics format
 
 # Install and run
 
@@ -103,3 +103,5 @@ Telegram:
 [@Nmikriukov](https://t.me/Nmikriukov) - main developer
 
 [@thedownhill](https://t.me/thedownhill) - neighbor of the main developer
+
+[@Winner_OK](https://t.me/Winner\_OK) - calendar module developer
