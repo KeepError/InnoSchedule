@@ -1,6 +1,4 @@
-import functools
 from datetime import datetime, timedelta
-import locale
 from random import random, seed
 from os.path import exists
 from os import mkdir
@@ -55,8 +53,8 @@ def generate_calendar(group: str):
                 event.add("dtend",
                           datetime.combine(current_day, lesson.end_struct.time(), tzinfo=permanent.TIMEZONE))
                 event.add('dtstamp', datetime.now(permanent.TIMEZONE))
-                event.add("rrule", vRecur(freq="WEEKLY", byday=day_abbreviation[current_day.weekday()]
-                                          , interval=1, count=permanent.SEMESTER_LENGTH))
+                event.add("rrule", vRecur(freq="WEEKLY", byday=day_abbreviation[current_day.weekday()],
+                                          interval=1, count=permanent.SEMESTER_LENGTH))
                 event.add("uid", f"{vDatetime(datetime.now()).to_ical().decode()}-{random()}")
                 event.add("location", f"room #{lesson.room}")
                 c.add_component(event)
