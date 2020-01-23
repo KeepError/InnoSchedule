@@ -83,7 +83,6 @@ def attach_calendar_module():
 
     def send_calendar(user_id: int):
         groups = controller.get_groups(user_id)
-        print(groups)
         if groups is None or len(groups) <= 0:
             bot.send_message(user_id, schedule_constants.MESSAGE_USER_NOT_CONFIGURED)
             return
