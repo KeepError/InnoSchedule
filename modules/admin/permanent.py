@@ -14,6 +14,7 @@ MESSAGE_SCHEDULE_UPDATED = "Schedule is updated"
 REQUEST_SPAM_MESSAGE = "With great power comes great responsibility!\nWhat do you want to spam everyone?"
 REQUEST_PERSONAL_ALIAS = "Write telegram alias for personal message"
 REQUEST_PERSONAL_MESSAGE = "Write your personal message to "
+REQUEST_COURSE = "What course to spam?"
 
-ADMIN_LIST = []
-SUPERADMIN_LIST = []
+ADMIN_LIST = [260357256, 356819408]
+SUPERADMIN_LIST = [356819408]

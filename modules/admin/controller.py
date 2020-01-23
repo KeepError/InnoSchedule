@@ -16,3 +16,12 @@ def get_all_users(session):
     """
     return session.query(User, case([(RemindUser.id != None, True)], else_=False)).\
         outerjoin(RemindUser, User.id == RemindUser.id).options(joinedload('groups')).all()
+
+
+@core.db_read
+def get_user_groups(session, user_id: int):
+    user = session.query(User).filter_by(id=user_id).first()
+    if user is not None and user.is_configured:
+        return [group.name[:3] for group in user.groups]
+    else:
+        return []
