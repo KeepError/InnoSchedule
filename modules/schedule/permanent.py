@@ -6,7 +6,7 @@ REGISTERED_COURSES = {'B19':    ['B19-01', 'B19-02', 'B19-03', 'B19-04', 'B19-05
                       'M19':    ['M19-SE-01', 'M19-SE-02', 'M19-DS-01', 'M19-DS-02', 'M19-RO-01'],
                       'M18':    ['M18-RO-01']}
 
-B19_ENGLISH_GROUPS = ['a', 'b']
+B19_ENGLISH_GROUPS = ['EN1', 'EN3', 'EN4', 'EN5', 'EN7', 'EN9', 'EN10', 'EN11', 'EN12']
 
 TEXT_DAYS_OF_WEEK = ("Mo", "Tu", "We", "Th", "Fr", "Sa")
 TEXT_BUTTON_NOW = "NOW❗"

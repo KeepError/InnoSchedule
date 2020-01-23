@@ -84,16 +84,15 @@ def attach_schedule_module():
             bot.send_message(message.chat.id, permanent.MESSAGE_ERROR, reply_markup=main_markup)
             return
 
-        course_BS = message.text
+        controller.append_user_group(message.from_user.id, message.text)
         if user_course == 'B19':
             # B19 need special configuration for english group
             options = telebot.types.ReplyKeyboardMarkup(True, False)
             # add buttons for english group select
-            options.add(*[f"{course_BS}-{group}" for group in permanent.B19_ENGLISH_GROUPS])
+            options.add(*permanent.B19_ENGLISH_GROUPS)
             msg = bot.send_message(message.chat.id, permanent.REQUEST_ENGLISH, reply_markup=options)
             bot.register_next_step_handler(msg, process_english_step)
         else:
-            controller.append_user_group(message.from_user.id, message.text)
             controller.set_user_configured(message.from_user.id, True)
             bot.send_message(message.chat.id, permanent.MESSAGE_SETTINGS_SAVED, reply_markup=main_markup)
 
@@ -102,7 +101,7 @@ def attach_schedule_module():
         Save user`s english group to database
         """
         log(permanent.MODULE_NAME, message)
-        if not message.text or len(message.text) != 8 or message.text[:6] not in permanent.REGISTERED_COURSES["B19"]:
+        if not message.text or message.text not in permanent.B19_ENGLISH_GROUPS:
             bot.send_message(message.chat.id, permanent.MESSAGE_ERROR, reply_markup=main_markup)
             return
         controller.append_user_group(message.from_user.id, message.text)

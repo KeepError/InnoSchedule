@@ -62,7 +62,7 @@ def attach_autoparser_module():
             return None, None, None
 
         # remove () brackets and strip
-        if lesson:
+        if lesson and "English" not in lesson:
             lesson = re.sub(r"\(.+\)", "", lesson).strip()
         if teacher:
             teacher = re.sub(r"\(.+\)", "", teacher).strip()
@@ -137,6 +137,7 @@ def attach_autoparser_module():
         # iterate over each cell
         col = 2
         all_course_groups = reduce(concat, [REGISTERED_COURSES[x] for x in REGISTERED_COURSES])
+        memorized_lessons = []  # hack to not insert lesson twice because of multiple columns for one group
         while col <= permanent.SCHEDULE_LAST_COLUMN:
             course_group = get_value(ws, 2, col)
             if course_group not in all_course_groups:
@@ -145,13 +146,11 @@ def attach_autoparser_module():
                 col += 1
                 continue
 
-            if course_group[:3] == "B19":
-                course_group = course_group[:6] + ('-a' if col % 2 == 0 else '-b')
-
             cur_weekday = 0
             row = 4
             while row <= permanent.SCHEDULE_LAST_ROW:
                 first_col_value = get_value(ws, row, 1)  # time or weekday
+                # extract time
                 if isinstance(first_col_value, str) and first_col_value.upper() in permanent.WEEKDAYS:
                     cur_weekday += 1
                     row += 1
@@ -168,10 +167,22 @@ def attach_autoparser_module():
                     row += 3
                     continue
 
-                subject, teacher, room = cell_new[0], cell_new[1], cell_new[2]
-                # extract time
                 time_splitted = first_col_value.split('-')
                 start_time, end_time = time_splitted[0], time_splitted[1]
+                subject, teacher, room = cell_new
+
+                lesson_id = (course_group, subject, teacher, room, start_time, end_time)
+                if lesson_id in memorized_lessons:
+                    row += 3
+                    continue
+                memorized_lessons.append(lesson_id)
+
+                # usually subject is assigned to course group, but not always (e.g. B19 English groups)
+                subject_group = course_group
+                # extract english group number from circle brackets
+                if "English" in subject:
+                    subject_group = "EN" + re.search("\\((.*)\\)", subject).group(1)
+
                 if compare_with_prev:
                     # compare new cell with old one
                     cell_old = parse_cell(ws_old, row, col)
@@ -179,14 +190,15 @@ def attach_autoparser_module():
                         subject_old, teacher_old, room_old = cell_old[0], cell_old[1], cell_old[2]
                         for admin in SUPERADMIN_LIST:
                             # send changes to admin
-                            bot.send_message(admin, f"{course_group} {first_col_value} changed:\n"
+                            bot.send_message(admin, f"{subject_group} {first_col_value} changed:\n"
                                                     f"Was {subject_old}, {teacher_old}, {room_old}\n"
                                                     f"Now {subject}, {teacher}, {room}\n")
 
                 # insert new lesson to database
-                controller.insert_lesson(course_group, subject, teacher, cur_weekday, start_time, end_time, room)
+                controller.insert_lesson(subject_group, subject, teacher, cur_weekday, start_time, end_time, room)
                 row += 3
             col += 1
+            # TODO change calendar generator
             generate_calendar(course_group)  # Triggers ICS generation for a group
 
         # add special lessons here manually
