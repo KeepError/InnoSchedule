@@ -95,7 +95,8 @@ def attach_autoparser_module():
                         f"{DATABASE_FOLDER}/{permanent.SCHEDULE_BACKUP_2}")
         except FileNotFoundError:
             pass
-        compare_with_prev = True  # compare with previous version of database if such is found
+        # compare with previous version of database if such is found
+        compare_with_prev = permanent.ADMIN_NOTIFY_TABLE_CHANGES
         try:
             # make new backup
             shutil.copy(f"{DATABASE_FOLDER}/{DATABASE_NAME}",

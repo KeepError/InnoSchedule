@@ -19,3 +19,4 @@ MESSAGE_ERROR_PARSE_SYNTAX = "Error during schedule parse with"
 MESSAGE_ERROR_UNKNOWN_GROUP = "Unknown group found in schedule"
 
 ADMIN_NOTIFY_TIME = "20:00"
+ADMIN_NOTIFY_TABLE_CHANGES = True
