@@ -3,6 +3,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 import threading
 import time
+from os import getpid
 
 import telebot
 import schedule
@@ -90,7 +91,7 @@ def db_write(function):
     return wrapper
 
 
-# should be done after all db imports done
+# should be done after all db imports
 from modules.schedule.controller import get_user
 
 
@@ -106,6 +107,10 @@ def attach_core_module():
             bot.send_message(message.chat.id, permanent.MESSAGE_HI, reply_markup=main_markup)
         elif message.text == "/help":
             bot.send_message(message.chat.id, permanent.MESSAGE_HELP, reply_markup=main_markup)
+
+
+with open("/tmp/innoschedule.pid", "wb") as f:
+    f.write(str(getpid()).encode())
 
 
 def compose_attached_modules(set_proxy=False):
