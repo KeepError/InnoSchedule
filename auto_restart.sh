@@ -2,6 +2,7 @@
 # https://github.com/eternnoir/pyTelegramBotAPI/issues/273
 # PyTelegramBotAPI supports restart_on_crash=True, but it contains bug. Use this script
 # pid is stored in tmp file by core module
+touch /tmp/innoschedule.pid
 PID=`cat /tmp/innoschedule.pid`
 while :
 do
@@ -10,8 +11,7 @@ do
 		date
 		echo "InnoSchedule restarting"
 		python3.7 InnoSchedule.py &
-    	sleep 5
 		PID=`cat /tmp/innoschedule.pid`
 	fi
+	sleep 5
 done
-
