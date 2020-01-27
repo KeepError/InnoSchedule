@@ -154,8 +154,6 @@ def attach_admin_module():
         """
         Example: "M18-SE-01" will return "M-SE"
         """
-        if group[:3] == "B19":
-            group = group[:-2]
         for course in REGISTERED_COURSES:
             if group in REGISTERED_COURSES[course]:
                 return course
