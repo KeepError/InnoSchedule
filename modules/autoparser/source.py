@@ -13,7 +13,6 @@ from modules.core.permanent import DATABASE_FOLDER, DATABASE_NAME
 from modules.core.source import bot
 from modules.schedule.permanent import REGISTERED_COURSES
 from modules.admin.permanent import SUPERADMIN_LIST
-from modules.calendar.source import generate_calendar
 
 """
 Module automatically parse schedule from google sheet and modify database
@@ -199,8 +198,6 @@ def attach_autoparser_module():
                 controller.insert_lesson(subject_group, subject, teacher, cur_weekday, start_time, end_time, room)
                 row += 3
             col += 1
-            # TODO change calendar generator
-            generate_calendar(course_group)  # Triggers ICS generation for a group
 
         # add special lessons here manually
         # controller.insert_lesson("B17-03", "SQL injections", "Nikolai Mikriukov", 0, "13:37", "15:00", 108)
