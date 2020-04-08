@@ -126,13 +126,19 @@ def attach_autoparser_module():
 
         # open workbook
         wb = load_workbook(f'{DATABASE_FOLDER}/{permanent.SCHEDULE_NAME}')
-        ws = wb[wb.sheetnames[0]]
+
+        sheet_index = 1  # default sheet index in timetable
+        # find sheet for bachelors and masters
+        for i, name in enumerate(wb.sheetnames):
+            if "BS" in name:
+                sheet_index = i
+        ws = wb[wb.sheetnames[sheet_index]]
 
         # open workbook from backup
         wb_old, ws_old = None, None
         if compare_with_prev:
             wb_old = load_workbook(f'{DATABASE_FOLDER}/{permanent.SCHEDULE_BACKUP_1}')
-            ws_old = wb_old[wb_old.sheetnames[0]]
+            ws_old = wb_old[wb_old.sheetnames[sheet_index]]
 
         # iterate over each cell
         col = 2
