@@ -102,6 +102,4 @@ Telegram:
 
 [@Nmikriukov](https://t.me/Nmikriukov) - main developer
 
-[@thedownhill](https://t.me/thedownhill) - neighbor of the main developer
-
 [@Winner_OK](https://t.me/Winner\_OK) - calendar module developer
