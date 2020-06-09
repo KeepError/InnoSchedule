@@ -101,6 +101,4 @@ Telegram:
 
 [@Nmikriukov](https://t.me/Nmikriukov) - главный разработчик
 
-[@thedownhill](https://t.me/thedownhill) - сосед главного разработчика
-
 [@Winner_OK](https://t.me/Winner\_OK) - разработчик модуля calendar
