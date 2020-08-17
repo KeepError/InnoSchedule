@@ -196,9 +196,12 @@ def attach_autoparser_module():
                         subject_old, teacher_old, room_old = cell_old[0], cell_old[1], cell_old[2]
                         for admin in SUPERADMIN_LIST:
                             # send changes to admin
-                            bot.send_message(admin, f"{subject_group} {first_col_value} changed:\n"
+                            print(f"{subject_group} {first_col_value} changed:\n"
                                                     f"Was {subject_old}, {teacher_old}, {room_old}\n"
                                                     f"Now {subject}, {teacher}, {room}\n")
+                            # bot.send_message(admin, f"{subject_group} {first_col_value} changed:\n"
+                            #                         f"Was {subject_old}, {teacher_old}, {room_old}\n"
+                            #                         f"Now {subject}, {teacher}, {room}\n")
 
                 # insert new lesson to database
                 controller.insert_lesson(subject_group, subject, teacher, cur_weekday, start_time, end_time, room)
