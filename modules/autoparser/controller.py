@@ -1,4 +1,6 @@
-from modules.schedule.classes import Lesson
+from sqlalchemy.orm import Session
+
+from modules.schedule.classes import Lesson, Group
 from modules.core import source as core
 
 

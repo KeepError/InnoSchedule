@@ -12,7 +12,7 @@ SCHEDULE_BACKUP_2 = "schedule.old.old.xlsx"
                          # "key=1H3SYKtt1_E_kqJ9REG9hWAJskpSDTrRKHe6tSglv5_0&output=xlsx"
 SCHEDULE_DOWNLOAD_LINK = "https://docs.google.com/spreadsheets/d/18OglpLQk7Jfrta93bLw0gJIttbcDdzZPT5K-avFM0Pc/export?format=xlsx"
 SCHEDULE_MIN_SIZE_BYTES = 30 * 1024
-SCHEDULE_LAST_COLUMN = 35
+SCHEDULE_LAST_COLUMN = 36
 SCHEDULE_LAST_ROW = 134
 
 MESSAGE_ERROR_NOTIFY = "Schedule parse error occurred. Please check manually."

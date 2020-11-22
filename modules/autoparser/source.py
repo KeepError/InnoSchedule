@@ -11,6 +11,7 @@ from modules.autoparser import controller
 from modules.autoparser import permanent
 from modules.core.permanent import DATABASE_FOLDER, DATABASE_NAME
 from modules.core.source import bot
+from modules.schedule.classes import Group
 from modules.schedule.permanent import REGISTERED_COURSES
 from modules.admin.permanent import SUPERADMIN_LIST
 
@@ -71,8 +72,11 @@ def attach_autoparser_module():
         if not teacher:  # unknown teacher
             teacher = '?'
         try:
-            room = int(room)
-        except (TypeError, ValueError):
+            if "English" not in lesson:
+                room = int(room)
+            else:
+                map(int, room.split("/"))
+        except (TypeError, ValueError, AttributeError):
             room = -1
 
         return lesson, teacher, room
@@ -127,7 +131,7 @@ def attach_autoparser_module():
         # open workbook
         wb = load_workbook(f'{DATABASE_FOLDER}/{permanent.SCHEDULE_NAME}')
 
-        sheet_index = 1  # default sheet index in timetable
+        sheet_index = 0  # default sheet index in timetable
         # find sheet for bachelors and masters
         for i, name in enumerate(wb.sheetnames):
             if "BS" in name:
@@ -177,17 +181,31 @@ def attach_autoparser_module():
                 start_time, end_time = time_splitted[0], time_splitted[1]
                 subject, teacher, room = cell_new
 
-                lesson_id = (course_group, subject, teacher, room, start_time, end_time)
+                # usually subject is assigned to course group, but not always (e.g. B20 English groups)
+                subject_group = course_group
+
+                is_english = "English" in subject
+                # extract english group number from circle brackets
+                if is_english:
+                    subject_group = list(map(str.strip, re.split(r"\s*/\s*", re.split(r"\s*-\s*", subject)[1])))
+                    subject = re.split(r"\s*-\s*", subject)[0]
+                    room1 = re.split(r"\s*/\s*", room if isinstance(room, str) else "")
+                    teacher1 = re.split(r"\s*/\s*", teacher if isinstance(room, str) else "")
+                    if len(room1) == len(subject_group):
+                        room = room1
+                    else:
+                        room = [room] * len(subject_group)
+                    if len(teacher1) == len(subject_group):
+                        teacher = teacher1
+                    else:
+                        teacher = [teacher] * len(subject_group)
+
+                lesson_id = (subject_group, subject, teacher, room, start_time, end_time, cur_weekday)
                 if lesson_id in memorized_lessons:
                     row += 3
                     continue
                 memorized_lessons.append(lesson_id)
 
-                # usually subject is assigned to course group, but not always (e.g. B19 English groups)
-                subject_group = course_group
-                # extract english group number from circle brackets
-                if "English" in subject:
-                    subject_group = "EN" + re.search("\\((.*)\\)", subject).group(1)
 
                 if compare_with_prev:
                     # compare new cell with old one
@@ -204,7 +222,13 @@ def attach_autoparser_module():
                             #                         f"Now {subject}, {teacher}, {room}\n")
 
                 # insert new lesson to database
-                controller.insert_lesson(subject_group, subject, teacher, cur_weekday, start_time, end_time, room)
+                if is_english:
+                    for group, room, teacher in zip(subject_group, room, teacher):
+                        controller.insert_lesson(group, subject, teacher, cur_weekday, start_time, end_time,
+                                                 room)
+                else:
+                    controller.insert_lesson(subject_group, subject, teacher, cur_weekday, start_time, end_time, room)
+
                 row += 3
             col += 1
 
