@@ -27,6 +27,7 @@ MESSAGE_HELP = "Schedule open platform for Innopolis students.\n\n" \
                "/help\n\n" \
                "Anyone could easily add his own functionality:\n" \
                "https://gitlab.com/Louie_ru/InnoSchedule\n" \
-               "@Nmikriukov @thedownhill"
+               "Original creators: @Nmikriukov @thedownhill\n" \
+               "Now maintained by @artembakhanov"
 MESSAGE_ERROR = "Sorry, I did not understand you"
 MESSAGE_UNKNOWN = "Unknown message from"

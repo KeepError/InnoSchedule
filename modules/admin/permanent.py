@@ -16,5 +16,5 @@ REQUEST_PERSONAL_ALIAS = "Write telegram alias for personal message"
 REQUEST_PERSONAL_MESSAGE = "Write your personal message to "
 REQUEST_COURSE = "What course to spam?"
 
-ADMIN_LIST = [245035790, 245035790]
+ADMIN_LIST = [245035790]
 SUPERADMIN_LIST = [245035790]

@@ -1,4 +1,5 @@
 from datetime import datetime
+from time import sleep
 
 import telebot
 
@@ -85,7 +86,7 @@ def attach_schedule_module():
             return
 
         controller.append_user_group(message.from_user.id, message.text)
-        if user_course == 'B19':
+        if user_course == 'B20':
             # B19 need special configuration for english group
             options = telebot.types.ReplyKeyboardMarkup(True, False)
             # add buttons for english group select
@@ -137,7 +138,7 @@ def attach_schedule_module():
             markup.add(*buttons)
             bot.send_message(message.chat.id, permanent.REQUEST_WEEKDAY, reply_markup=markup)
         elif message.text == permanent.TEXT_BUTTON_WEEK:
-            bot.send_message(message.chat.id, permanent.MESSAGE_FULL_WEEK, reply_markup=main_markup)
+            bot.send_message(message.chat.id, permanent.MESSAGE_FULL_WEEK, reply_markup=main_markup, parse_mode="MarkdownV2")
 
     def send_current_schedule(to_chat_id, about_user_id):
         """

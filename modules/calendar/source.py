@@ -11,7 +11,6 @@ from modules.calendar import controller, permanent
 import modules.schedule.permanent as schedule_constants
 from modules.schedule.source import main_markup
 
-
 """
 Module translates the schedule to an ics file. Can be used as an alternative to Schedule Assistant
 
@@ -63,7 +62,9 @@ def attach_calendar_module():
 
         for day in range(permanent.WEEK_LENGTH):
             for group in groups:
-                current_day = permanent.SEMESTER_START + timedelta(days=day)
+                is_module = group not in schedule_constants.REGISTERED_COURSES["B20"] and group not in \
+                            schedule_constants.REGISTERED_COURSES["B20"]
+                current_day = (permanent.MODULE_SEMESTER_START if is_module else permanent.SEMESTER_START) + timedelta(days=day)
                 lessons = controller.get_lessons(group, current_day.weekday())
                 if len(lessons) != 0:
                     for lesson in lessons:
@@ -75,7 +76,7 @@ def attach_calendar_module():
                             datetime.combine(current_day, lesson.end_struct.time(), tzinfo=permanent.TIMEZONE)))
                         event.add('dtstamp', vDatetime(datetime.now(permanent.TIMEZONE)))
                         event.add("rrule", vRecur(freq="WEEKLY", byday=day_abbreviation[current_day.weekday()],
-                                                  interval=1, count=permanent.SEMESTER_LENGTH))
+                                                  interval=1, count=permanent.MODULE_SEMESTER_LENGTH if is_module else permanent.SEMESTER_LENGTH))
                         event.add("uid", f"{vDatetime(datetime.now()).to_ical().decode()}-{random()}")
                         event.add("location", f"room #{lesson.room}")
                         c.add_component(event)
