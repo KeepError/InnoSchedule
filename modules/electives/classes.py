@@ -1,13 +1,31 @@
-from sqlalchemy import Column, String, Integer, Table, ForeignKey
+from datetime import datetime
+from sqlalchemy import Column, String, Integer, Table, ForeignKey, DateTime
+from sqlalchemy.orm import relationship, backref
 
 from modules.core.source import Base
 
-# Table which stores which user has which elective
+# Table that stores which user has which elective
 user_elective_association = Table(
     'electives_user_elective_association', Base.metadata,
-    Column('user', Integer, ForeignKey('schedule_users.id')),
-    Column('elective', Integer, ForeignKey('electives_elective.id')),
+    Column('user', Integer, ForeignKey("electives_user.chat_id")),
+    Column('elective', Integer, ForeignKey("electives_elective.id")),
 )
+
+
+class User(Base):
+    """
+    User who uses electives schedule functionality
+    """
+    __tablename__ = "electives_user"
+
+    chat_id: int = Column(Integer, primary_key=True)
+    electives = relationship(
+        "Elective", secondary=user_elective_association,
+        backref=backref('users', lazy='joined')
+    )
+
+    def __init__(self, chat_id: int):
+        self.chat_id = chat_id
 
 
 class Elective(Base):
@@ -20,24 +38,27 @@ class Elective(Base):
     id: int = Column(Integer, primary_key=True)
     name: str = Column(String)
     teacher: str = Column(String)
-    block: int = Column(Integer)
-    room: int = Column(Integer)
     acronym: str = Column(String)
 
-    def __init__(self, name: str, teacher: str, block: int, room: int, acronym: str):
+    lessons = relationship("ElectiveLesson", backref="subject",
+                           cascade="delete, delete-orphan", lazy='joined')
+
+    def __init__(self, name: str, teacher: str, acronym: str):
         self.acronym = acronym
-        self.room = room
-        self.block = block
         self.teacher = teacher
         self.name = name
 
-    def __str__(self):
-        """
-        Converts current lesson to string for easy output
 
-        :return: String
-        """
-        return f"{self.name}\n" \
-               f"👨‍🏫 {self.teacher}\n" \
-               f"🕐 {self.block} 	— {self.acronym}\n" \
-               f"🚪 {self.room if self.room != -1 else '?'}\n"
+class ElectiveLesson(Base):
+    """
+    Class that represents one particular lesson on an elective
+    """
+    __tablename__ = "electives_lessons"
+    id: int = Column(Integer, primary_key=True)
+    datetime: datetime = Column(DateTime)
+    room: int = Column(Integer)
+    elective_id = Column(Integer, ForeignKey('electives_elective.id'))
+
+    def __init__(self, room: int, date_time: datetime):
+        self.room = room
+        self.datetime = date_time

@@ -10,3 +10,4 @@ openpyxl
 # calendar module
 pytz
 icalendar
+datetime
