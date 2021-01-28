@@ -17,16 +17,27 @@ class Elective(Base):
     """
     __tablename__ = "electives_elective"
 
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
-    teacher = Column(String)
-    block = Column(Integer)
-    room = Column(Integer)
-    acronym = Column(String)
+    id: int = Column(Integer, primary_key=True)
+    name: str = Column(String)
+    teacher: str = Column(String)
+    block: int = Column(Integer)
+    room: int = Column(Integer)
+    acronym: str = Column(String)
 
-    def __init__(self, name, teacher, block, room, acronym):
+    def __init__(self, name: str, teacher: str, block: int, room: int, acronym: str):
         self.acronym = acronym
         self.room = room
         self.block = block
         self.teacher = teacher
         self.name = name
+
+    def __str__(self):
+        """
+        Converts current lesson to string for easy output
+
+        :return: String
+        """
+        return f"{self.name}\n" \
+               f"👨‍🏫 {self.teacher}\n" \
+               f"🕐 {self.block} 	— {self.acronym}\n" \
+               f"🚪 {self.room if self.room != -1 else '?'}\n"
