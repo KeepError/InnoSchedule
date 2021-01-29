@@ -22,4 +22,4 @@ def attach_electives_module():
 
     @bot.message_handler(commands=['elective_test'])
     def test_command_handler(message: Message):
-        bot.register_next_step_handler(message, test.run_tests)
+        test.run_tests(message)

@@ -40,8 +40,7 @@ class Elective(Base):
     teacher: str = Column(String)
     acronym: str = Column(String)
 
-    lessons = relationship("ElectiveLesson", backref="subject",
-                           cascade="delete, delete-orphan", lazy='joined')
+    lessons = relationship("ElectiveLesson", cascade="delete, delete-orphan")
 
     def __init__(self, name: str, teacher: str, acronym: str):
         self.acronym = acronym
@@ -54,10 +53,10 @@ class ElectiveLesson(Base):
     Class that represents one particular lesson on an elective
     """
     __tablename__ = "electives_lessons"
-    id: int = Column(Integer, primary_key=True)
-    datetime: datetime = Column(DateTime)
+    datetime: datetime = Column(DateTime, primary_key=True)
     room: int = Column(Integer)
-    elective_id = Column(Integer, ForeignKey('electives_elective.id'))
+    elective_id = Column(Integer,
+                         ForeignKey('electives_elective.id'), primary_key=True)
 
     def __init__(self, room: int, date_time: datetime):
         self.room = room
