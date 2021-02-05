@@ -27,6 +27,9 @@ class User(Base):
     def __init__(self, chat_id: int):
         self.chat_id = chat_id
 
+    def __eq__(self, other: "User"):
+        return self.chat_id == other.chat_id
+
 
 class Elective(Base):
     """
@@ -40,12 +43,22 @@ class Elective(Base):
     teacher: str = Column(String)
     acronym: str = Column(String)
 
+    # Basically, group is the sheet name. Users not belong to it, it is just for convenience
+    # of choosing elective from long list of available ones
+    group: str = Column(String)
+
     lessons = relationship("ElectiveLesson", cascade="delete, delete-orphan")
 
-    def __init__(self, name: str, teacher: str, acronym: str):
+    def __init__(self, name: str, teacher: str, acronym: str, group: str):
         self.acronym = acronym
         self.teacher = teacher
         self.name = name
+        self.group = group
+
+    def __eq__(self, other: "Elective"):
+        return self.name == other.name and \
+               self.teacher == other.teacher and \
+               self.group == other.group
 
 
 class ElectiveLesson(Base):
@@ -61,3 +74,8 @@ class ElectiveLesson(Base):
     def __init__(self, room: int, date_time: datetime):
         self.room = room
         self.datetime = date_time
+
+    def __eq__(self, other: "ElectiveLesson"):
+        return self.elective_id == other.elective_id and \
+               self.datetime == other.datetime and \
+               self.room == other.room
