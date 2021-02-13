@@ -66,16 +66,16 @@ class ElectiveLesson(Base):
     Class that represents one particular lesson on an elective
     """
     __tablename__ = "electives_lessons"
-    datetime: datetime = Column(DateTime, primary_key=True)
+    date_time: datetime = Column(DateTime, primary_key=True)
     room: int = Column(Integer)
     elective_id = Column(Integer,
                          ForeignKey('electives_elective.id'), primary_key=True)
 
     def __init__(self, room: int, date_time: datetime):
         self.room = room
-        self.datetime = date_time
+        self.date_time = date_time
 
     def __eq__(self, other: "ElectiveLesson"):
         return self.elective_id == other.elective_id and \
-               self.datetime == other.datetime and \
+               self.date_time == other.date_time and \
                self.room == other.room

@@ -2,6 +2,7 @@
 Tests for electives module. As I did not understand how to mock sqlalchemy db,
 all tests should clean after themselves
 """
+import os
 import unittest
 from datetime import datetime
 
@@ -13,7 +14,7 @@ from modules.core.source import bot
 from modules.electives import controller, parser
 from modules.electives.classes import User, Elective, ElectiveLesson
 from modules.electives.controller import DBException
-from modules.electives.parser import find_electives
+from modules.electives.parser import find_electives, find_lessons
 
 
 class DBTests(unittest.TestCase):
@@ -68,12 +69,21 @@ class DBTests(unittest.TestCase):
 
 
 class ParserTests(unittest.TestCase):
-    def test_parse_electives_list(self):
+    @classmethod
+    def setUpClass(cls: "ParserTests") -> None:
         temp_schedule = requests.get(
             "https://docs.google.com/spreadsheets/d/1V_qqAuQ8k2tLJzQbUgiODbi5-V1C6E5F/export?format=xlsx")
-        with open("modules/electives/tmp.xlsx", 'wb') as f:
+        cls.save_path = "modules/electives/tmp.xlsx"
+        with open(cls.save_path, 'wb') as f:
             f.write(temp_schedule.content)
-        wb = load_workbook("modules/electives/tmp.xlsx", read_only=True)
+        cls.wb = load_workbook(cls.save_path, read_only=True)
+
+    @classmethod
+    def tearDownClass(cls: "ParserTests") -> None:
+        os.remove(cls.save_path)
+
+    def test_parse_electives_list(self):
+        wb = self.wb
         sheet = wb[wb.sheetnames[0]]
         electives = find_electives(sheet)
         valid_electives = [
@@ -96,8 +106,25 @@ class ParserTests(unittest.TestCase):
         ]
         self.assertEqual(valid_electives, electives)
 
+    def test_parse_lessons(self):
+        wb = self.wb
+        lessons_dict = find_lessons(wb[wb.sheetnames[0]])
+        self.assertEqual(len(lessons_dict), 11)
+
+        total_lessons = 0
+        for _, value in lessons_dict.items():
+            total_lessons += len(value)
+        self.assertEqual(total_lessons, 227)
+
+        self.assertEqual(len(lessons_dict["RE"]), 20)
+        self.assertEqual(len(lessons_dict["IHCIDAI"]), 20)
+        self.assertEqual(len(lessons_dict["SLR"]), 26)
+        self.assertEqual(lessons_dict["DSMPF"][3].date_time,
+                         datetime(datetime.now().year, 2, 9, 16, 0))
+
 
 def run_tests(message: Message):
+    controller.delete_electives()
     elective_suite = unittest.TestSuite()
     elective_suite.addTest(unittest.makeSuite(DBTests))
     elective_suite.addTest(unittest.makeSuite(ParserTests))

@@ -6,3 +6,9 @@ ELECTIVE_DEFINITION_COLUMNS = {
     "name": 12,
     "teacher": 13
 }
+
+DAYS_IN_WEEK = 7
+
+# There can't be more than 20 weeks in a semester ... right?
+MAX_WEEKS = 20
+MAX_TIMESLOTS_IN_DAY = 10

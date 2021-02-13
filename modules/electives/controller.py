@@ -81,7 +81,7 @@ def delete_lessons(session: Session):
 @db_write
 def delete_lesson(session: Session, lesson: ElectiveLesson):
     session.query(ElectiveLesson).filter_by(elective_id=lesson.elective_id,
-                                            datetime=lesson.datetime).delete()
+                                            datetime=lesson.date_time).delete()
 
 
 @db_read
@@ -120,7 +120,7 @@ def add_elective_lesson(session: Session, elective_id: int, lesson: ElectiveLess
     Creates lesson record for elective. Objects, passed as parameters should be
     reloaded then
     """
-    inserted_lesson = ElectiveLesson(room=lesson.room, date_time=lesson.datetime)
+    inserted_lesson = ElectiveLesson(room=lesson.room, date_time=lesson.date_time)
     inserted_lesson.elective_id = elective_id
     session.add(inserted_lesson)
     q_elective = session.query(Elective).filter(Elective.id == elective_id).one()
