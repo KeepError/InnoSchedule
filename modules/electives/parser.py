@@ -4,6 +4,7 @@ This module contains all necessary functions to parse electives schedule.
 import calendar
 from datetime import datetime
 from typing import List, Union, Dict
+from sqlalchemy.exc import SQLAlchemyError
 
 import requests
 from openpyxl import load_workbook
@@ -26,7 +27,20 @@ def parse_new_electives_timetable():
     controller.delete_electives()
     wb = load_workbook(permanent.ELECTIVE_FILE_PATH, read_only=True)
     for sheet in wb:
+        # Parse sheet
         electives = find_electives(sheet)
+        lessons = find_lessons(sheet)
+        # Save to db
+        for elective in electives:
+            # No point in saving elective w/o lessons to SCHEDULE bot db
+            if elective.acronym in lessons:
+                try:
+                    controller.add_elective(elective)
+                    child_lessons = lessons[elective.acronym]
+                    for lesson in child_lessons:
+                        controller.add_elective_lesson(elective.id, lesson)
+                except SQLAlchemyError:
+                    controller.delete_elective(elective.id)
 
 
 def find_electives(sheet: Worksheet) -> List[Elective]:
@@ -111,8 +125,13 @@ def find_lessons(sheet: Worksheet) -> Dict[str, List[ElectiveLesson]]:
                 tokens = value.split()
                 # Even-numbered tokens are acronyms, and odds - rooms
 
-                acronyms = tokens[::2]
-                rooms = [int(i) for i in tokens[1:][::2]]
+                acronyms: List[str] = []
+                rooms: List[int] = []
+                for i in range(len(tokens)):
+                    if tokens[i].isupper():
+                        acronyms.append(tokens[i])
+                    if tokens[i].isnumeric():
+                        rooms.append(int(tokens[i]))
 
                 for idx, acronym in enumerate(acronyms):
                     lesson: ElectiveLesson = ElectiveLesson(rooms[idx], date_and_time)

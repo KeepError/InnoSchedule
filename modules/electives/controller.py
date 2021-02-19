@@ -4,7 +4,7 @@ related to electives. All the functions are designed with "fail-fast" philosophy
 and raise exceptions if something goes wrong (querying nonexistent user for
 example)
 """
-from typing import List
+from typing import List, Tuple
 
 from sqlalchemy.orm import Session
 
@@ -67,6 +67,12 @@ def delete_elective(session: Session, elective_id: int):
     q_elective = session.query(Elective).filter(Elective.id == elective_id).one()
     # To use sqlalchemy autodeletes, they should be done like this
     session.delete(q_elective)
+
+
+@db_read
+def get_categories(session: Session) -> List[str]:
+    groups: List[Tuple[str]] = session.query(Elective.group).distinct()
+    return [group[0] for group in groups]
 
 
 #

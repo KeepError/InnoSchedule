@@ -12,3 +12,9 @@ DAYS_IN_WEEK = 7
 # There can't be more than 20 weeks in a semester ... right?
 MAX_WEEKS = 20
 MAX_TIMESLOTS_IN_DAY = 10
+
+# Messages
+VERBOSE_PARSE_STARTED = "Parsing started..."
+VERBOSE_PARSE_DONE = "Parsing finished"
+
+PROMPT_CHOOSE_CATEGORY = "Choose category:"
