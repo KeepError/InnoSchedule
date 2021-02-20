@@ -16,5 +16,12 @@ MAX_TIMESLOTS_IN_DAY = 10
 # Messages
 VERBOSE_PARSE_STARTED = "Parsing started..."
 VERBOSE_PARSE_DONE = "Parsing finished"
+VERBOSE_CONFIGURED = "Your elective settings have been saved successfully!"
+VERBOSE_YOU_ENROLLED = "You enrolled to "
+VERBOSE_YOU_UNENROLLED = "You unenrolled from "
 
 PROMPT_CHOOSE_CATEGORY = "Choose category:"
+PROMPT_CHOOSE_ELECTIVE = "Choose elective(s) to subscribe:"
+
+BUTTON_DONE = "Done"
+BUTTON_BACK = "Back"

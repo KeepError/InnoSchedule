@@ -26,7 +26,9 @@ def delete_electives(session: Session):
     """
     Delete all electives from DB
     """
-    session.query(Elective).delete()
+    electives = session.query(Elective).all()
+    for elective in electives:
+        session.delete(elective)
 
 
 @db_write
@@ -67,6 +69,11 @@ def delete_elective(session: Session, elective_id: int):
     q_elective = session.query(Elective).filter(Elective.id == elective_id).one()
     # To use sqlalchemy autodeletes, they should be done like this
     session.delete(q_elective)
+
+
+@db_read
+def get_electives_by_category(session: Session, category: str) -> List[Elective]:
+    return session.query(Elective).filter_by(group=category).all()
 
 
 @db_read
@@ -113,7 +120,8 @@ def register_user(session: Session, user: User):
 
 @db_write
 def delete_user(session: Session, user_id: int):
-    session.query(User).filter_by(chat_id=user_id).delete()
+    q = session.query(User).filter_by(chat_id=user_id).one()
+    session.delete(q)
 
 
 #
@@ -157,3 +165,10 @@ def un_enroll(session: Session, elective_id: int, user_id: int):
     q_user = session.query(User).filter(User.chat_id == user_id).one()
     q_elective = session.query(Elective).filter(Elective.id == elective_id).one()
     q_elective.users.remove(q_user)
+
+
+@db_read
+def is_enrolled(session: Session, elective_id: int, user_id: int):
+    q_user: User = session.query(User).filter_by(chat_id=user_id).one()
+    electives = [e.id for e in q_user.electives]
+    return elective_id in electives

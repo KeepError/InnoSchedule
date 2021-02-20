@@ -124,7 +124,6 @@ class ParserTests(unittest.TestCase):
 
 
 def run_tests(message: Message):
-    controller.delete_electives()
     elective_suite = unittest.TestSuite()
     elective_suite.addTest(unittest.makeSuite(DBTests))
     elective_suite.addTest(unittest.makeSuite(ParserTests))
