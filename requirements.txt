@@ -6,7 +6,8 @@ requests
 urllib3
 schedule
 file_read_backwards
-openpyxl
+openpyxl==3.0.4
 # calendar module
 pytz
 icalendar
+pandas

@@ -10,7 +10,7 @@ do
 	then
 		date
 		echo "InnoSchedule restarting"
-		python3.7 InnoSchedule.py &
+		python3 InnoSchedule.py &
 		sleep 3
 		PID=`cat /tmp/innoschedule.pid`
 	fi

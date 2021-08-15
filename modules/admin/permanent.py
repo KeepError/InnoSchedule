@@ -1,4 +1,4 @@
-token = "989487441:AAFexzu4-EDKudwHd7yFJxmP1tzNhgnB4M8"
+token = "989487441:AAFexzu4-EDKudwHd7yFJxmP1tzNhgnB4M8"  # "1360816203:AAGlHpdXrWlv6p7EGEImAgRTqQOoUNMkbC0"
 MODULE_NAME = "admin"
 
 MESSAGE_AMOUNT = "People registered: "
@@ -9,7 +9,6 @@ MESSAGE_ABORTED = "Aborted"
 MESSAGE_USER_NOT_FOUND = "User not found"
 MESSAGE_EXCEPTION = "Exception occurred:\n"
 MESSAGE_SCHEDULE_UPDATED = "Schedule is updated"
-
 
 REQUEST_SPAM_MESSAGE = "With great power comes great responsibility!\nWhat do you want to spam everyone?"
 REQUEST_PERSONAL_ALIAS = "Write telegram alias for personal message"
