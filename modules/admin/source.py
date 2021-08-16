@@ -5,8 +5,10 @@ import telebot
 
 from modules.core.source import bot, log
 from modules.admin import controller, permanent
+from modules.electives.permanent import VERBOSE_PARSE_STARTED
 from modules.schedule.controller import get_user_by_alias
 from modules.autoparser.source import attach_autoparser_module
+from modules.electives.source import attach_electives_module
 from modules.schedule.permanent import REGISTERED_COURSES
 
 
@@ -21,7 +23,7 @@ def attach_admin_module():
     # global because register_next_step_handler can not pass parameters
     personal_msg_user_id = None
     spam_course = None
-    admin_commands = ['die', 'log', 'spam', 'pm', 'stats', 'parse', 'helpa', 'spam_course']
+    admin_commands = ['die', 'log', 'spam', 'pm', 'stats', 'parse', 'parse_electives', 'helpa', 'spam_course']
 
     @bot.message_handler(commands=admin_commands)
     def admin(message):
@@ -67,6 +69,12 @@ def attach_admin_module():
             if message.from_user.id not in permanent.SUPERADMIN_LIST:
                 return
             attach_autoparser_module.parse_schedule_func()
+            bot.send_message(message.chat.id, permanent.MESSAGE_SCHEDULE_UPDATED)
+        elif message.text == '/parse_electives':
+            if message.from_user.id not in permanent.SUPERADMIN_LIST:
+                return
+            bot.send_message(message.chat.id, VERBOSE_PARSE_STARTED)
+            attach_electives_module.parse_schedule_func()
             bot.send_message(message.chat.id, permanent.MESSAGE_SCHEDULE_UPDATED)
         elif message.text == '/helpa':
             # send admin commands help

@@ -1,3 +1,5 @@
+from pytz import timezone
+
 MODULE_NAME = "schedule"
 REGISTERED_COURSES = {'B21': ['UNKNOWN'],
                       'B20': ['B20-01', 'B20-02', 'B20-03', 'B20-04', 'B20-05(28)', 'B20-06', 'B20-07'],
@@ -40,6 +42,8 @@ HEADER_SEPARATOR = "\n"
 GROUP_LIST = [item for sub in REGISTERED_COURSES.values() for item in sub] + B19_ENGLISH_GROUPS
 GROUPS = ', '.join([f"('{item}')" for item in GROUP_LIST])
 INSERT_GROUPS = f"insert into schedule_groups (name) values {GROUPS};"
+
+TIMEZONE = timezone("Europe/Moscow")
 
 if __name__ == '__main__':
     print(INSERT_GROUPS)

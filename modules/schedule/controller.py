@@ -1,7 +1,9 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
-from modules.schedule.classes import User, Group
+from modules.electives.controller import get_elective_lessons_of_user_on_date
+from modules.schedule.classes import User, Group, Lesson
 from modules.core.source import db_read, db_write
+from modules.schedule.permanent import TIMEZONE
 
 
 @db_read
@@ -19,7 +21,24 @@ def get_day_lessons(session, user_id, day):
     for group in user.groups:
         # filter lessons from user`s groups by given day
         lessons += list(filter(lambda lesson: lesson.day == day, group.lessons))
-    return sorted(lessons)
+
+    # select the nearest weekday
+    now = datetime.now(tz=TIMEZONE)
+    nearest_weekday = now + timedelta(days=(day - now.weekday()) % 7)
+
+    electives = get_elective_lessons_of_user_on_date(session, user_id, nearest_weekday)
+
+    # this is a very strange solution, fix needed
+    electives = [Lesson(subject=x.elective.name,
+                        start="{:02d}:{:02d}".format(x.date_time.hour, x.date_time.minute),
+                        end="{:02d}:{:02d}".format((x.date_time + timedelta(minutes=90)).hour,
+                                                   (x.date_time + timedelta(minutes=90)).minute),
+                        group="?",
+                        teacher=x.elective.teacher,
+                        day=0,
+                        room=x.room) for x in electives]
+
+    return sorted(lessons + electives)
 
 
 def get_current_lesson(user_id):
