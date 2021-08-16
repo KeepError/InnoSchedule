@@ -63,9 +63,9 @@ def attach_schedule_module():
         # add buttons of groups in selected course
         options.add(*list(permanent.REGISTERED_COURSES[course]))
         msg = bot.send_message(message.chat.id, permanent.REQUEST_GROUP, reply_markup=options)
-        bot.register_next_step_handler(msg, process_group_step)
+        bot.register_next_step_handler(msg, process_group_step, user_course=course)
 
-    def process_group_step(message):
+    def process_group_step(message, user_course=""):
         """
         Save user`s group choice to database
         """
@@ -74,19 +74,13 @@ def attach_schedule_module():
         if not message.text:
             bot.send_message(message.chat.id, permanent.MESSAGE_ERROR, reply_markup=main_markup)
             return
-        if message.text[:3] in permanent.REGISTERED_COURSES.keys():
-            user_course = message.text[:3]
-        elif message.text[:4] in permanent.REGISTERED_COURSES.keys():
-            user_course = message.text[:4]
-        else:
-            bot.send_message(message.chat.id, permanent.MESSAGE_ERROR, reply_markup=main_markup)
-            return
+
         if message.text not in permanent.REGISTERED_COURSES[user_course]:
             bot.send_message(message.chat.id, permanent.MESSAGE_ERROR, reply_markup=main_markup)
             return
 
         controller.append_user_group(message.from_user.id, message.text)
-        if user_course == 'B20':
+        if user_course == 'B21':
             # B19 need special configuration for english group
             options = telebot.types.ReplyKeyboardMarkup(True, False)
             # add buttons for english group select
@@ -138,7 +132,8 @@ def attach_schedule_module():
             markup.add(*buttons)
             bot.send_message(message.chat.id, permanent.REQUEST_WEEKDAY, reply_markup=markup)
         elif message.text == permanent.TEXT_BUTTON_WEEK:
-            bot.send_message(message.chat.id, permanent.MESSAGE_FULL_WEEK, reply_markup=main_markup, parse_mode="MarkdownV2")
+            bot.send_message(message.chat.id, permanent.MESSAGE_FULL_WEEK, reply_markup=main_markup,
+                             parse_mode="MarkdownV2")
 
     def send_current_schedule(to_chat_id, about_user_id):
         """

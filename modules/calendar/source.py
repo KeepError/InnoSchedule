@@ -64,7 +64,7 @@ def attach_calendar_module():
 
         for day in range(permanent.WEEK_LENGTH):
             for group in groups:
-                is_module = group not in schedule_constants.REGISTERED_COURSES["B20"] and group not in \
+                is_module = group not in schedule_constants.REGISTERED_COURSES["B21"] and group not in \
                             schedule_constants.REGISTERED_COURSES["B20"]
                 current_day = (permanent.MODULE_SEMESTER_START if is_module else permanent.SEMESTER_START) + timedelta(
                     days=day)
