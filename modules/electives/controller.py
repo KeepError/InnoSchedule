@@ -162,7 +162,11 @@ def get_electives_of_user_id(session: Session, user_id: int) -> List[Elective]:
 
 
 def get_elective_lessons_of_user_on_date(session: Session, user_id: int, date: datetime) -> List[ElectiveLesson]:
-    electives = [x.id for x in session.query(User).filter_by(chat_id=user_id).one().electives]
+    try:
+        electives = [x.id for x in session.query(User).filter_by(chat_id=user_id).one().electives]
+    except:
+        register_user(User(user_id))
+        electives = []
     return session.query(ElectiveLesson).filter(ElectiveLesson.elective_id.in_(electives),
                                                 func.date(ElectiveLesson.date_time) == date.date())
 
