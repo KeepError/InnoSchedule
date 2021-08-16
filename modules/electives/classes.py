@@ -47,7 +47,7 @@ class Elective(Base):
     # of choosing elective from long list of available ones
     group: str = Column(String)
 
-    lessons = relationship("ElectiveLesson", cascade="delete, delete-orphan")
+    lessons = relationship("ElectiveLesson", cascade="delete, delete-orphan", back_populates="elective")
 
     def __init__(self, name: str, teacher: str, acronym: str, group: str):
         self.acronym = acronym
@@ -70,6 +70,7 @@ class ElectiveLesson(Base):
     room: int = Column(Integer)
     elective_id = Column(Integer,
                          ForeignKey('electives_elective.id'), primary_key=True)
+    elective = relationship("Elective", back_populates="lessons")
 
     def __init__(self, room: int, date_time: datetime):
         self.room = room

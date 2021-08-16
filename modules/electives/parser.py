@@ -72,6 +72,7 @@ def find_electives(sheet: Worksheet) -> List[Elective]:
     electives_remain = True
     cursor_row = first_nonempty_row()
     while electives_remain:
+        number = sheet.cell(cursor_row, permanent.NUMBER_COLUMN).value
         name = sheet.cell(cursor_row, permanent.ELECTIVE_DEFINITION_COLUMNS["name"]).value
         teacher = sheet.cell(cursor_row,
                              permanent.ELECTIVE_DEFINITION_COLUMNS["teacher"]).value
@@ -80,6 +81,9 @@ def find_electives(sheet: Worksheet) -> List[Elective]:
         data = [strip_none(i) for i in [name, teacher, acronym]]
         if all(len(part) != 0 for part in data):
             result.append(Elective(*data[:3], group))
+            cursor_row += 1
+        elif number:
+            # master courses have two categories separated by an empty line
             cursor_row += 1
         else:
             electives_remain = False
@@ -122,19 +126,24 @@ def find_lessons(sheet: Worksheet) -> Dict[str, List[ElectiveLesson]]:
                     minute=int(start_time.split(sep=':')[1])
                 )
 
-                tokens = value.split()
+                lines = value.split("\n")
                 # Even-numbered tokens are acronyms, and odds - rooms
 
-                acronyms: List[str] = []
-                rooms: List[int] = []
-                for i in range(len(tokens)):
-                    if tokens[i].isupper():
-                        acronyms.append(tokens[i])
-                    if tokens[i].isnumeric():
-                        rooms.append(int(tokens[i]))
+                # acronyms: List[str] = []
+                # rooms: List[int] = []
+                # for i in range(len(tokens)):
+                #     if tokens[i].isupper():
+                #         acronyms.append(tokens[i])
+                #     if tokens[i].isnumeric():
+                #         rooms.append(int(tokens[i]))
 
-                for idx, acronym in enumerate(acronyms):
-                    lesson: ElectiveLesson = ElectiveLesson(rooms[idx], date_and_time)
+                for idx, line in enumerate(lines):
+                    tokens = line.split()
+                    if len(tokens) == 0:
+                        continue
+                    acronym = tokens[0]
+                    room = tokens[1] if len(tokens) > 1 else "?"
+                    lesson: ElectiveLesson = ElectiveLesson(room, date_and_time)
 
                     lessons: List[ElectiveLesson] = [lesson]
                     if acronym in result:

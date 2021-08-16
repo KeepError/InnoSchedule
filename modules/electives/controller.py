@@ -4,8 +4,10 @@ related to electives. All the functions are designed with "fail-fast" philosophy
 and raise exceptions if something goes wrong (querying nonexistent user for
 example)
 """
+from datetime import datetime
 from typing import List, Tuple
 
+from sqlalchemy import cast, Date, func
 from sqlalchemy.orm import Session
 
 from modules.core.source import db_write, db_read
@@ -151,6 +153,18 @@ def get_lessons_of_elective(session: Session, elective_id: int) -> List[Elective
 def get_electives_of_user(session: Session, user: User) -> List[Elective]:
     q_user = session.query(User).filter_by(chat_id=user.chat_id).one()
     return q_user.electives
+
+
+@db_read
+def get_electives_of_user_id(session: Session, user_id: int) -> List[Elective]:
+    q_user = session.query(User).filter_by(chat_id=user_id).one()
+    return q_user.electives
+
+
+def get_elective_lessons_of_user_on_date(session: Session, user_id: int, date: datetime) -> List[ElectiveLesson]:
+    electives = [x.id for x in session.query(User).filter_by(chat_id=user_id).one().electives]
+    return session.query(ElectiveLesson).filter(ElectiveLesson.elective_id.in_(electives),
+                                                func.date(ElectiveLesson.date_time) == date.date())
 
 
 @db_write

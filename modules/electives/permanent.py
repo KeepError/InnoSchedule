@@ -1,6 +1,8 @@
-ELECTIVE_SCHEDULE_LINK = "https://docs.google.com/spreadsheets/d/1V_qqAuQ8k2tLJzQbUgiODbi5-V1C6E5F/export?format=xlsx"
+ELECTIVE_SCHEDULE_LINK = "https://docs.google.com/spreadsheets/d/1sNMeT3U4HTVwuOwrjKcybbV8M_uSpvgl/export?format=xlsx"
 
 ELECTIVE_FILE_PATH = "modules/electives/schedule.xlsx"
+
+NUMBER_COLUMN = 10
 ELECTIVE_DEFINITION_COLUMNS = {
     "acronym": 11,
     "name": 12,
@@ -14,14 +16,14 @@ MAX_WEEKS = 20
 MAX_TIMESLOTS_IN_DAY = 10
 
 # Messages
-VERBOSE_PARSE_STARTED = "Parsing started..."
-VERBOSE_PARSE_DONE = "Parsing finished"
-VERBOSE_CONFIGURED = "Your elective settings have been saved successfully!"
-VERBOSE_YOU_ENROLLED = "You enrolled to "
-VERBOSE_YOU_UNENROLLED = "You unenrolled from "
+VERBOSE_PARSE_STARTED = "⏳ Parsing started..."
+VERBOSE_PARSE_DONE = "✅ Parsing finished"
+VERBOSE_CONFIGURED = "✅ Your elective settings have been saved successfully!"
+VERBOSE_YOU_ENROLLED = "✅ You enrolled to "
+VERBOSE_YOU_UNENROLLED = "❌ You unenrolled from "
 
-PROMPT_CHOOSE_CATEGORY = "Choose category:"
-PROMPT_CHOOSE_ELECTIVE = "Choose elective(s) to subscribe:"
+PROMPT_CHOOSE_CATEGORY = "🔖 Choose category:"
+PROMPT_CHOOSE_ELECTIVE = "📚 Choose elective(s) to subscribe:"
 
-BUTTON_DONE = "Done"
-BUTTON_BACK = "Back"
+BUTTON_DONE = "Done ✅"
+BUTTON_BACK = "Back ◀️"

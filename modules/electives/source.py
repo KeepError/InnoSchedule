@@ -16,23 +16,14 @@ Author: @AAHTOXA (Telegram)
 
 
 def attach_electives_module():
-    @bot.message_handler(commands=['parse_electives'])
-    def parse_handler(message: Message):
-        bot.send_message(message.chat.id,
-                         permanent.VERBOSE_PARSE_STARTED)
-        # TODO: Restrict this command to admins only
-        parser.parse_new_electives_timetable()
-        bot.send_message(message.chat.id,
-                         permanent.VERBOSE_PARSE_DONE)
-
     @bot.message_handler(commands=['configure_electives'])
     def configure_electives_command_handler(message: Message):
         if '/configure_electives' in message.text:
             try:
-                controller.delete_user(message.chat.id)
+                controller.delete_user(message.from_user.id)
             except:
                 pass
-        controller.register_user(User(message.chat.id))
+        controller.register_user(User(message.from_user.id))
         choose_category_step(message.chat.id)
 
     def choose_category_step(chat_id: int):
@@ -43,6 +34,16 @@ def attach_electives_module():
                                         reply_markup=categories_markup)
         bot.register_next_step_handler(msg, process_category_step)
 
+    def generate_courses_keyboard(chosen_category, user_id):
+        electives_markup = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=False)
+        buttons = [
+            f"{'✅ ' if controller.is_enrolled(elective.id, user_id) else ''}{elective.name}, {elective.id}"
+            for elective in
+            controller.get_electives_by_category(chosen_category)]
+        electives_markup.add(*buttons, permanent.BUTTON_BACK, permanent.BUTTON_DONE)
+
+        return electives_markup
+
     def process_category_step(message: Message):
         if message.text == permanent.BUTTON_DONE:
             bot.send_message(message.chat.id, permanent.VERBOSE_CONFIGURED,
@@ -52,16 +53,12 @@ def attach_electives_module():
             bot.send_message(message.chat.id, sch_permanent.MESSAGE_ERROR)
             bot.register_next_step_handler(message, process_category_step)
             return
-        electives_markup = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=False)
-        chosen_category = message.text
-        buttons = [f"{elective.name}, {elective.id}" for elective in
-                   controller.get_electives_by_category(chosen_category)]
-        electives_markup.add(*buttons, permanent.BUTTON_BACK, permanent.BUTTON_DONE)
-        msg: Message = bot.send_message(message.chat.id, permanent.PROMPT_CHOOSE_ELECTIVE,
-                                        reply_markup=electives_markup)
-        bot.register_next_step_handler(msg, process_elective_step)
 
-    def process_elective_step(message: Message):
+        msg: Message = bot.send_message(message.chat.id, permanent.PROMPT_CHOOSE_ELECTIVE,
+                                        reply_markup=generate_courses_keyboard(message.text, message.from_user.id))
+        bot.register_next_step_handler(msg, process_elective_step, chosen_category=message.text)
+
+    def process_elective_step(message: Message, chosen_category=""):
         if message.text == permanent.BUTTON_DONE:
             bot.send_message(message.chat.id, permanent.VERBOSE_CONFIGURED,
                              reply_markup=main_markup)
@@ -72,18 +69,21 @@ def attach_electives_module():
         try:
             elective_id = int(message.text.split(", ")[1])
             elective = controller.get_elective(elective_id)
-            if not controller.is_enrolled(elective_id, message.chat.id):
-                controller.enroll(elective_id, message.chat.id)
+            if not controller.is_enrolled(elective_id, message.from_user.id):
+                controller.enroll(elective_id, message.from_user.id)
                 text = permanent.VERBOSE_YOU_ENROLLED
             else:
-                controller.un_enroll(elective_id, message.chat.id)
+                controller.un_enroll(elective_id, message.from_user.id)
                 text = permanent.VERBOSE_YOU_UNENROLLED
-            bot.send_message(message.chat.id, text + elective.name)
-            bot.register_next_step_handler(message, process_elective_step)
+            bot.send_message(message.chat.id, text + elective.name,
+                             reply_markup=generate_courses_keyboard(chosen_category, message.from_user.id))
+            bot.register_next_step_handler(message, process_elective_step, chosen_category=chosen_category)
         except:
             bot.send_message(message.chat.id, sch_permanent.MESSAGE_ERROR)
-            bot.register_next_step_handler(message, process_elective_step)
+            bot.register_next_step_handler(message, process_elective_step, chosen_category=chosen_category)
 
     @bot.message_handler(commands=['elective_test'])
     def test_command_handler(message: Message):
         test.run_tests(message)
+
+    attach_electives_module.parse_schedule_func = parser.parse_new_electives_timetable
