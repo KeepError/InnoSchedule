@@ -13,14 +13,15 @@ SCHEDULE_BACKUP_2 = "schedule.old.old.xlsx"
 # SCHEDULE_DOWNLOAD_LINK = "https://docs.google.com/spreadsheets/d/18OglpLQk7Jfrta93bLw0gJIttbcDdzZPT5K-avFM0Pc/export?format=xlsx"
 SCHEDULE_DOWNLOAD_LINK = "https://docs.google.com/spreadsheets/d/1pWWCBSRzeUvxrgiskFkT0zMuW-urIkZGc7vx1jCmYFQ/export?format=xlsx"
 SCHEDULE_MIN_SIZE_BYTES = 10 * 1024
-SCHEDULE_LAST_COLUMN = 36
+SCHEDULE_LAST_COLUMN = 37
 SCHEDULE_LAST_ROW = 134
 SCHEDULE_TIMETABLES = [
-    (23, 26),
+    (23, 30),
     (15, 22),
     (8, 14),
     (1, 7),
-    (23, 26)
+    (31, 35),
+    (36, 37),
 ]
 
 MESSAGE_ERROR_NOTIFY = "Schedule parse error occurred. Please check manually."
