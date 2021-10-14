@@ -4,7 +4,7 @@ from pytz import timezone
 MODULE_NAME = "calendar"
 TIMEZONE = timezone("Europe/Moscow")
 
-MODULE_SEMESTER_START = date(year=2021, month=8, day=16) # forth and third year students
+MODULE_SEMESTER_START = date(year=2021, month=10, day=14) # forth and third year students
 MODULE_SEMESTER_LENGTH = 9  # number of weeks
 
 SEMESTER_START = date(year=2021, month=8, day=16) # first and second year students
