@@ -21,7 +21,7 @@ TEXT_BUTTON_WEEK = "WEEK 🗓️"
 
 MESSAGE_USER_NOT_CONFIGURED = "Sorry. I do not know your groups yet. 😥\n" \
                               "Please use /configure_schedule command to set it up"
-MESSAGE_FULL_WEEK = "[Full week schedule](https://docs.google.com/spreadsheets/d/1pWWCBSRzeUvxrgiskFkT0zMuW-urIkZGc7vx1jCmYFQ)"
+MESSAGE_FULL_WEEK = "[Full week schedule](https://docs.google.com/spreadsheets/d/1hVcGurw7LAOmTpk6n19Kho67xyDtvTiIA0KM4G71mdU/edit#gid=398810915)"
 MESSAGE_FREE_DAY = "No lessons on this day! Lucky you are!"
 MESSAGE_FRIEND_NOT_FOUND = "Sorry. Your friend is not registered.\nPlease tell him about our cool bot!"
 MESSAGE_ERROR = "Sorry, I did not understand you"
