@@ -134,9 +134,9 @@ def attach_autoparser_module():
 
         sheet_index = 0  # default sheet index in timetable
         # find sheet for bachelors and masters
-        for i, name in enumerate(wb.sheetnames):
-            if "BS" in name:
-                sheet_index = i
+        # for i, name in enumerate(wb.sheetnames):
+        #     if "BS" in name:
+        #         sheet_index = i
         ws = wb[wb.sheetnames[sheet_index]]
 
         # open workbook from backup
@@ -171,6 +171,7 @@ def attach_autoparser_module():
                         continue
 
                     cell_new = parse_cell(ws, row, col)
+
                     if not cell_new[0]:
                         row += 3
                         continue
