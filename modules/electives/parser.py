@@ -107,15 +107,17 @@ def find_lessons(sheet: Worksheet) -> Dict[str, List[ElectiveLesson]]:
             if value is None:
                 # Skip empty cell
                 continue
-            if value.split()[0] in ignore_list:
+            if value.split() and value.split()[0] in ignore_list:
                 continue
 
-            if value.split()[0] in month_names:
+            if value.split() and value.split()[0] in month_names:
                 # New day begins
                 current_month, current_day = value.split()
                 current_day = int(current_day)
             else:
                 # Lesson
+                if not sheet.cell(row, 1).value:
+                    continue
                 start_time: str = sheet.cell(row, 1).value.split(sep='-')[0]
 
                 date_and_time = datetime(

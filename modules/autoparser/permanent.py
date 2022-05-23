@@ -8,21 +8,21 @@ DATABASE_BACKUP_2 = "db.old.old.sqlite3"
 SCHEDULE_NAME = "schedule.xlsx"
 SCHEDULE_BACKUP_1 = "schedule.old.xlsx"
 SCHEDULE_BACKUP_2 = "schedule.old.old.xlsx"
-# SCHEDULE_DOWNLOAD_LINK = "https://docs.google.com/spreadsheet/ccc?" \
-# "key=1H3SYKtt1_E_kqJ9REG9hWAJskpSDTrRKHe6tSglv5_0&output=xlsx"
-# SCHEDULE_DOWNLOAD_LINK = "https://docs.google.com/spreadsheets/d/18OglpLQk7Jfrta93bLw0gJIttbcDdzZPT5K-avFM0Pc/export?format=xlsx"
-# SCHEDULE_DOWNLOAD_LINK = "https://docs.google.com/spreadsheets/d/1pWWCBSRzeUvxrgiskFkT0zMuW-urIkZGc7vx1jCmYFQ/export?format=xlsx"
-SCHEDULE_DOWNLOAD_LINK = "https://docs.google.com/spreadsheets/d/1hVcGurw7LAOmTpk6n19Kho67xyDtvTiIA0KM4G71mdU/export?format=xlsx"
+SCHEDULE_DOWNLOAD_LINK = "https://docs.google.com/spreadsheets/d/1IOFD7B4rsJZWrqGBU4LZXOCTzLNc3cVP0fMIcmYkmJ8/export?format=xlsx"
 SCHEDULE_MIN_SIZE_BYTES = 10 * 1024
 SCHEDULE_LAST_COLUMN = 37
 SCHEDULE_LAST_ROW = 134
 SCHEDULE_TIMETABLES = [
     (1, 9),
-    (10, 16),
-    (17, 23),
-    (24, 30),
-    (31, 36),
-    (37, 37),
+    (1, 9),
+    (1, 9),
+    (1, 9),
+    (1, 9),
+    # (10, 16),
+    # (17, 23),
+    # (24, 30),
+    # (31, 36),
+    # (37, 37),
 ]
 
 MESSAGE_ERROR_NOTIFY = "Schedule parse error occurred. Please check manually."

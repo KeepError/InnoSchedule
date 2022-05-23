@@ -1,4 +1,4 @@
-token = "989487441:AAFexzu4-EDKudwHd7yFJxmP1tzNhgnB4M8"  # "1360816203:AAGlHpdXrWlv6p7EGEImAgRTqQOoUNMkbC0"
+token = ""
 MODULE_NAME = "admin"
 
 MESSAGE_AMOUNT = "People registered: "
@@ -15,5 +15,5 @@ REQUEST_PERSONAL_ALIAS = "Write telegram alias for personal message"
 REQUEST_PERSONAL_MESSAGE = "Write your personal message to "
 REQUEST_COURSE = "What course to spam?"
 
-ADMIN_LIST = [245035790]
-SUPERADMIN_LIST = [245035790]
+ADMIN_LIST = [301238367, 330012360]
+SUPERADMIN_LIST = [301238367, 330012360]

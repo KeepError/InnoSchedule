@@ -1,4 +1,4 @@
-ELECTIVE_SCHEDULE_LINK = "https://docs.google.com/spreadsheets/d/12P9GWjgrufwvfnzV4NJ-Q2QBt6g9Gdjb/export?format=xlsx"
+ELECTIVE_SCHEDULE_LINK = "https://docs.google.com/spreadsheets/d/1rax9ydjyAlvfLn0NgFnfCBccr8Z6Pubx/export?format=xlsx"
 
 ELECTIVE_FILE_PATH = "modules/electives/schedule.xlsx"
 

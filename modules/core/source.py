@@ -153,4 +153,4 @@ def compose_attached_modules(set_proxy=False):
     Base.metadata.create_all(db_engine)
 
     # start listening for user`s messages
-    bot.polling(none_stop=False, timeout=50)
+    bot.infinity_polling(timeout=50)

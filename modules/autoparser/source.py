@@ -55,7 +55,7 @@ def attach_autoparser_module():
         lesson = get_value(ws, row, col)
         teacher = get_value(ws, row + 1, col)
         room = get_value(ws, row + 2, col)
-        if not lesson or len(lesson) < 2:
+        if not teacher or not room or not lesson or len(lesson) < 2:
             return None, None, None  # empty cell
 
         if "reserve" in lesson.lower():
